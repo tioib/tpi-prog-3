@@ -21,8 +21,9 @@ namespace Diagramador.NET
             InitializeComponent();
             panel2 = splitContainer.Panel2;
             bmp = new Bitmap(panel2.ClientSize.Width, panel2.ClientSize.Height);
+            pictureBox1.Image = bmp;
+            pictureBox1.Size = new Size(panel2.ClientSize.Width, panel2.ClientSize.Height);
         }
-
 
         Bitmap bmp;
         SplitterPanel panel2;
@@ -36,10 +37,10 @@ namespace Diagramador.NET
             if(dibujar)
             {
                 anterior = e.Location;
-                panel2.Refresh();
+                pictureBox1.Refresh();
 
 
-                panel2.CreateGraphics().DrawRectangle(
+                pictureBox1.CreateGraphics().DrawRectangle(
                         preDibujo(),
                         Math.Min(actual.X,anterior.X),
                         Math.Min(actual.Y,anterior.Y),
@@ -89,8 +90,9 @@ namespace Diagramador.NET
 
                 pen.Dispose();
                 g.Dispose();
+                
             }
-            
+            pictureBox1.Refresh();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
