@@ -26,12 +26,10 @@ namespace Diagramador.NET
             pictureBox1.Size = new Size(panel2.ClientSize.Width, panel2.ClientSize.Height);
         }
 
-        List<Graphics> rects = new List<Graphics>();
         List<int[]> rectLocations = new List<int[]>();
 
         Bitmap bmp;
         SplitterPanel panel2;
-        private Rectangle RcDraw;
         private int PenWidth = 5;
         Point primerPunto, actualPunto;
 
@@ -63,37 +61,16 @@ namespace Diagramador.NET
                                 )
                             )
                         ) ||
-                        (r[0] - r[4] > primerPunto.X &&
-                            (
-                                e.X > r[0] - r[4] &&
-                                (
-                                    (r[1] - r[4] < e.Y && primerPunto.Y < r[1]) ||
-                                    (r[1] + r[3] + r[4] > e.Y && primerPunto.Y > r[1] + r[3]) ||
-                                    (primerPunto.Y > r[1] - r[3] && primerPunto.Y < r[1] + r[3] + r[4])
-                                )
-                            )
-                        ) ||
-                        (r[0] + r[2] + r[4] < primerPunto.X &&
-                            (
-                                e.X < r[0] + r[2] + r[4] &&
-                                (
-                                    (r[1] - r[4] < e.Y && primerPunto.Y < r[1]) ||
-                                    (r[1] + r[3] + r[4] > e.Y && primerPunto.Y > r[1] + r[3]) ||
-                                    (primerPunto.Y > r[1] - r[3] && primerPunto.Y < r[1] + r[3] + r[4])
-                                )
-                            )
+                        primerPunto.Y > r[1] - r[4] && primerPunto.Y < r[1] + r[3] + r[4] &&
+                        (
+                            (primerPunto.X < r[0] - r[4] && e.X > r[0] - r[4]) ||
+                            (primerPunto.X > r[0] + r[2] + r[4] && e.X < r[0] + r[2] + r[4])
                         )
-                    )
-                        return;
-
-
-                    
-                    
+                    ) return;
                 }
                         
                 actualPunto = e.Location;
                 pictureBox1.Refresh();
-
 
                 pictureBox1.CreateGraphics().DrawRectangle(
                         preDibujo(),
@@ -102,13 +79,15 @@ namespace Diagramador.NET
                         Math.Abs(actualPunto.X - primerPunto.X),
                         Math.Abs(actualPunto.Y - primerPunto.Y)
                     );
-                
-                
-                // Force a repaint of the region occupied by the RcDrawangle...
+            }
+        }
 
-                
-                
-
+        void ListaDebug()
+        {
+            Debug.WriteLine("LISTA: "+rectLocations.Count);
+            foreach(var r in rectLocations)
+            {
+                Debug.WriteLine($"X1: {r[0]}, Y1: {r[1]}, X2: {r[0]+r[2]}, Y2: {r[1]+r[3]}");
             }
         }
 
@@ -144,6 +123,37 @@ namespace Diagramador.NET
             
         }
 
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            ListaDebug();
+            pictureBox1.Size = new Size(splitContainer.Panel2.ClientSize.Width, splitContainer.Panel2.ClientSize.Height);
+            if(bmp != null)
+            {
+                bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+                pictureBox1.Image = bmp;
+
+                foreach(var r in rectLocations)
+                {
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.DrawRectangle(
+                            new Pen(Color.Black, r[4]),
+                            r[0],
+                            r[1],
+                            r[2],
+                            r[3]
+                            );
+
+                        g.Dispose();
+
+                        pictureBox1.Refresh();
+                    }
+                }
+            }
+            
+        }
+
+
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
             if(e.Button != MouseButtons.Left)
@@ -153,6 +163,7 @@ namespace Diagramador.NET
                 {
                     if (InsideRectangle(r,e.Location))
                     {
+                        index = rectLocations.IndexOf(r);
                         using (Graphics g = Graphics.FromImage(bmp))
                         {
                             g.DrawRectangle(
@@ -165,10 +176,6 @@ namespace Diagramador.NET
                             pictureBox1.Refresh();
                             g.Dispose();
                         }
-                        rects[index = rectLocations.IndexOf(r)].Dispose();
-                        rects.RemoveAt(index);
-
-
                     }
                 }
                 if (index != -1)
@@ -204,18 +211,14 @@ namespace Diagramador.NET
                         );
 
                     pen.Dispose();
-                    rects.Add(g);
+                    g.Dispose();
                     rectLocations.Add(rect);
 
                 }
                 pictureBox1.Refresh();
             }
-        }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-                  // Draw the RcDrawangle...
-                    
+            ListaDebug();
         }
 
        
