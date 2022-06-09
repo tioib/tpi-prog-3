@@ -68,36 +68,42 @@ namespace Diagramador.NET
         {
             if(dibujar)
             {
-                foreach (var r in rects)
+                var listas = GetListas();
+                for(int i = 0; i < listas.Length; i++)
                 {
-                    if (
-                        (r[1] - r[4] > primerPunto.Y && //se hizo clic arriba del recangulo colisionado y
+                    foreach (var r in listas[i])
+                    {
+                        if ( r[5] < 4 &&
                             (
-                                e.Y > r[1] - r[4] && //mouse apoyado debajo del lado superior del recangulo colisionado y
+                                (r[1] - r[4] > primerPunto.Y && //se hizo clic arriba del recangulo colisionado y
+                                    (
+                                        e.Y > r[1] - r[4] && //mouse apoyado debajo del lado superior del recangulo colisionado y
+                                        (
+                                            (r[0] - r[4] < e.X && primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
+                                            (r[0] + r[2] + r[4] > e.X && primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
+                                            (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
+                                        )
+                                    )
+                                ) || //o...
+                                (r[1] + r[3] + r[4] < primerPunto.Y && //se hizo clic abajo del recangulo colisionado y
+                                    (
+                                        e.Y < r[1] + r[3] + r[4] && //mouse apoyado encima del lado inferior del recangulo colisionado y
+                                        (
+                                            (r[0] - r[4] < e.X && primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
+                                            (r[0] + r[2] + r[4] > e.X && primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
+                                            (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
+                                        )
+                                    )
+                                ) || //o...
+                                primerPunto.Y > r[1] - r[4] && primerPunto.Y < r[1] + r[3] + r[4] && //se hizo clic directamente a un costado del tectangulo y
                                 (
-                                    (r[0] - r[4] < e.X && primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
-                                    (r[0] + r[2] + r[4] > e.X && primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
-                                    (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
+                                    (primerPunto.X < r[0] - r[4] && e.X > r[0] - r[4]) || //se hizo clic a la izquierda del rectangulo y mouse apoyado a la derecha del lado izquierda o
+                                    (primerPunto.X > r[0] + r[2] + r[4] && e.X < r[0] + r[2] + r[4]) //se hizo clic a la derecha del rectangulo y mouse apoyado a la izquierda del lado derecho 
                                 )
                             )
-                        ) || //o...
-                        (r[1] + r[3] + r[4] < primerPunto.Y && //se hizo clic abajo del recangulo colisionado y
-                            (
-                                e.Y < r[1] + r[3] + r[4] && //mouse apoyado encima del lado inferior del recangulo colisionado y
-                                (
-                                    (r[0] - r[4] < e.X && primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
-                                    (r[0] + r[2] + r[4] > e.X && primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
-                                    (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
-                                )
-                            )
-                        ) || //o...
-                        primerPunto.Y > r[1] - r[4] && primerPunto.Y < r[1] + r[3] + r[4] && //se hizo clic directamente a un costado del tectangulo y
-                        (
-                            (primerPunto.X < r[0] - r[4] && e.X > r[0] - r[4]) || //se hizo clic a la izquierda del rectangulo y mouse apoyado a la derecha del lado izquierda o
-                            (primerPunto.X > r[0] + r[2] + r[4] && e.X < r[0] + r[2] + r[4]) //se hizo clic a la derecha del rectangulo y mouse apoyado a la izquierda del lado derecho 
-                        )
-                    ) return;
-                }
+                        ) return;
+                    }
+                }    
                         
                 actualPunto = e.Location;
                 pictureBox1.Refresh();
@@ -152,7 +158,7 @@ namespace Diagramador.NET
                 {
                     foreach (var r in listas[i])
                     {
-                        if (InsideRectangle(r, e.Location))
+                        if (InsideFigura(r, e.Location))
                         {
                             opcion = r[5];
                             using (Graphics g = Graphics.FromImage(bmp))
@@ -375,7 +381,7 @@ namespace Diagramador.NET
             return pen;
         }
         
-        private bool InsideRectangle(int[] r, Point e)
+        private bool InsideFigura(int[] r, Point e)
         {
             if(r[5] < 4) return r[0] <= e.X && r[1] <= e.Y && (r[0] + r[2]) >= e.X && (r[1] + r[3]) >= e.Y;
 
@@ -394,9 +400,9 @@ namespace Diagramador.NET
                 var listas = GetListas();
                 for(int i = 0; i < listas.Length; i++)
                 {
-                    foreach (var r in rects)
+                    foreach (var r in listas[i])
                     {
-                        if (InsideRectangle(r, e.Location))
+                        if (InsideFigura(r, e.Location))
                         {
                             primerPunto = e.Location;
                             return;
