@@ -15,12 +15,21 @@ namespace Diagramador.NET
 {
     public partial class Form1 : Form
     {
-        bool dibujar = false, drag = false;
+        int accionMouse = -1;
+
+        List<int[]> figuras = new List<int[]>();
+        List<Color> colores = new List<Color>();
+
+        int[] figura;
+
+        Bitmap bmp;
+        private int PenWidth = 5, opcion = 0;
+        Point primerPunto, actualPunto, previous;
 
         public Form1()
         {
             InitializeComponent();
-            panel2 = splitContainer.Panel2;
+            SplitterPanel panel2 = splitContainer.Panel2;
             bmp = new Bitmap(panel2.ClientSize.Width, panel2.ClientSize.Height);
             pictureBox1.Image = bmp;
             pictureBox1.Size = new Size(panel2.ClientSize.Width, panel2.ClientSize.Height);
@@ -50,15 +59,7 @@ namespace Diagramador.NET
             pictureBox2.BackColor = colorDialog1.Color;
         }
 
-        List<int[]> figuras = new List<int[]>();
-        List<Color> colores = new List<Color>();
-
-        int[] figura;
-
-        Bitmap bmp;
-        SplitterPanel panel2;
-        private int PenWidth = 5, opcion = 0;
-        Point primerPunto, actualPunto, previous;
+        
 
         private void ChangeSize(object sender, EventArgs e)
         {
@@ -69,14 +70,205 @@ namespace Diagramador.NET
         {
             if (e.Button == MouseButtons.Left)
             {
+                if(accionMouse > 1)
+                {
+                    primerPunto = new Point(figura[0], figura[1]);
+                    actualPunto = new Point(figura[0] + figura[2], figura[1] + figura[3]);
+                    accionMouse += 10;
+
+                    return;
+                }
 
                 foreach (var r in figuras)
                 {
                     if (InsideFigura(r, e.Location))
                     {
-                        drag = true;
+                        accionMouse = 1;
                         pictureBox1.Cursor = Cursors.Cross;
                         figura = new int[] {
+                            r[0], //X
+                            r[1], //Y
+                            r[2], //width
+                            r[3], //height
+                            r[4], //grosor de linea de la figura (PenWidth)
+                            r[5], //tipo de figura (rectangulo, elipse, etc)
+                            figuras.IndexOf(r) //indice de la figura en la lista (para el color)
+                        };
+                        actualPunto = previous = e.Location;
+                        return;
+                    }
+                }
+
+                accionMouse = 0;
+                primerPunto = e.Location;
+                Debug.WriteLine(0);
+            }
+        }
+
+        private bool CheckCollisionB(Point primerPunto, Point actualPunto)
+        {
+            foreach (var r in figuras)
+            {
+                if (r[0] != figura[0] && r[1] != figura[1] &&
+                    (
+                        figura[5] < 4 && r[5] < 4 &&
+                        (
+                            (r[1] - r[4] > primerPunto.Y &&
+                                (
+                                    actualPunto.Y > r[1] - r[4] &&
+                                    (
+                                        (r[0] - r[4] < actualPunto.X && primerPunto.X < r[0]) ||
+                                        (r[0] + r[2] + r[4] > actualPunto.X && primerPunto.X > r[0] + r[2]) ||
+                                        (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4])
+                                    )
+                                )
+                            ) || //o...
+                            (r[1] + r[3] + r[4] < actualPunto.Y &&
+                                (
+                                    primerPunto.Y < r[1] + r[3] + r[4] &&
+                                    (
+                                        (r[0] - r[4] < actualPunto.X && primerPunto.X < r[0]) ||
+                                        (r[0] + r[2] + r[4] > actualPunto.X && primerPunto.X > r[0] + r[2]) ||
+                                        (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4])
+                                    )
+                                )
+                            ) || //o...
+                            primerPunto.Y > r[1] - r[4] && primerPunto.Y < r[1] + r[3] + r[4] &&
+                            (
+                                (primerPunto.X < r[0] - r[4] && actualPunto.X > r[0] - r[4]) ||
+                                (actualPunto.X > r[0] + r[2] + r[4] && primerPunto.X < r[0] + r[2] + r[4])
+                            )
+                        )
+                    )
+                ) return true;
+            }
+            return false;
+        }
+
+        private void Draw(object sender, MouseEventArgs e)
+        {
+            Point primerPunto = new Point(), actualPunto = new Point();
+            switch (accionMouse)
+            {
+                case -1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: break;
+                case 0:
+                    foreach (var r in figuras)
+                    {
+                        if (opcion < 4 && r[5] < 4 &&
+                            (
+                                (r[1] - r[4] > this.primerPunto.Y && //se hizo clic arriba del recangulo colisionado y
+                                    (
+                                        e.Y > r[1] - r[4] && //mouse apoyado debajo del lado superior del recangulo colisionado y
+                                        (
+                                            (r[0] - r[4] < e.X && this.primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
+                                            (r[0] + r[2] + r[4] > e.X && this.primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
+                                            (this.primerPunto.X > r[0] - r[4] && this.primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
+                                        )
+                                    )
+                                ) || //o...
+                                (r[1] + r[3] + r[4] < this.primerPunto.Y && //se hizo clic abajo del recangulo colisionado y
+                                    (
+                                        e.Y < r[1] + r[3] + r[4] && //mouse apoyado encima del lado inferior del recangulo colisionado y
+                                        (
+                                            (r[0] - r[4] < e.X && this.primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
+                                            (r[0] + r[2] + r[4] > e.X && this.primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
+                                            (this.primerPunto.X > r[0] - r[4] && this.primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
+                                        )
+                                    )
+                                ) || //o...
+                                this.primerPunto.Y > r[1] - r[4] && this.primerPunto.Y < r[1] + r[3] + r[4] && //se hizo clic directamente a un costado del tectangulo y
+                                (
+                                    (this.primerPunto.X < r[0] - r[4] && e.X > r[0] - r[4]) || //se hizo clic a la izquierda del rectangulo y mouse apoyado a la derecha del lado izquierda o
+                                    (this.primerPunto.X > r[0] + r[2] + r[4] && e.X < r[0] + r[2] + r[4]) //se hizo clic a la derecha del rectangulo y mouse apoyado a la izquierda del lado derecho 
+                                )
+                            )
+                        ) return;
+                    }
+
+                    this.actualPunto = e.Location;
+                    DrawPreview(opcion);
+                    return;
+
+                case 1:
+                    primerPunto.X = e.X < previous.X ? figura[0] - Math.Abs(e.X - previous.X) : figura[0] + Math.Abs(e.X - previous.X);
+                    primerPunto.Y = e.Y < previous.Y ? figura[1] - Math.Abs(e.Y - previous.Y) : figura[1] + Math.Abs(e.Y - previous.Y);
+
+                    actualPunto.X = primerPunto.X + figura[2]; actualPunto.Y = primerPunto.Y + figura[3];
+
+                    if (CheckCollisionB(primerPunto,actualPunto)) return;
+                    
+                    this.primerPunto = primerPunto;
+                    this.actualPunto = actualPunto;
+                    DrawPreview(figura[5]);
+                    return;
+
+                default:
+                    primerPunto.X = primerPunto.X != this.primerPunto.X ? this.primerPunto.X : primerPunto.X;
+                    primerPunto.Y = primerPunto.Y != this.primerPunto.Y ? this.primerPunto.Y : primerPunto.Y;
+                    actualPunto.X = actualPunto.X != this.actualPunto.X ? this.actualPunto.X : actualPunto.X;
+                    actualPunto.Y = actualPunto.Y != this.actualPunto.Y ? this.actualPunto.Y : actualPunto.Y;
+                    switch (accionMouse)
+                    {
+                        case 12:
+                            if (e.X >= actualPunto.X) return;
+                            primerPunto.X = e.X;
+                            break;
+
+                        case 13:
+                            if (e.X <= primerPunto.X) return;
+                            actualPunto.X = e.X;
+                            break;
+
+                        case 14:
+                            if (e.Y >= actualPunto.Y) return;
+                            primerPunto.Y = e.Y;
+                            break;
+
+                        case 15:
+                            if (e.Y <= primerPunto.Y) return;
+                            actualPunto.Y = e.Y;
+                            break;
+
+                        case 16: 
+                            if (e.X >= actualPunto.X) return;
+                            if (e.Y >= actualPunto.Y) return;
+                            primerPunto.X = e.X;
+                            primerPunto.Y = e.Y;
+                            break;
+
+                        case 17:
+                            if (e.X <= primerPunto.X) return;
+                            if (e.Y >= actualPunto.Y) return;
+                            actualPunto.X = e.X;
+                            primerPunto.Y = e.Y;
+                            break;
+
+                        case 18:
+                            if (e.X >= actualPunto.X) return;
+                            if (e.Y <= primerPunto.Y) return;
+                            primerPunto.X = e.X;
+                            actualPunto.Y = e.Y;
+                            break;
+
+                        case 19:
+                            if (e.X <= primerPunto.X) return;
+                            if (e.Y <= primerPunto.Y) return;
+                            actualPunto.X = e.X;
+                            actualPunto.Y = e.Y;
+                            break;
+
+                    }
+                    if (CheckCollisionB(primerPunto, actualPunto)) return;
+                    this.primerPunto = primerPunto; this.actualPunto = actualPunto;
+                    DrawPreview(figura[5]);
+                    return;
+            }
+
+            foreach (var r in figuras)
+            {
+                if (r[5] < 4)
+                {
+                    figura = new int[] {
                             r[0],
                             r[1],
                             r[2],
@@ -85,17 +277,75 @@ namespace Diagramador.NET
                             r[5],
                             figuras.IndexOf(r)
                         };
-                        actualPunto = previous = e.Location;
+
+                    if (e.Y > r[1] && e.Y < r[1] + r[3])
+                    {
+                        if (e.X >= r[0] - r[4] && e.X < r[0])
+                        {
+                            pictureBox1.Cursor = Cursors.SizeWE;
+                            accionMouse = 2;
+                            return;
+                        }
+
+                        if (e.X <= r[0] + r[2] + r[4] && e.X > r[0] + r[2])
+                        {
+                            pictureBox1.Cursor = Cursors.SizeWE;
+                            accionMouse = 3;
+                            return;
+                        }
+                    }
+
+                    if(e.X > r[0] && e.X < r[0] + r[2])
+                    {
+                        if(e.Y >= r[1] - r[4] && e.Y < r[1])
+                        {
+                            pictureBox1.Cursor = Cursors.SizeNS;
+                            accionMouse = 4;
+                            return;
+                        }
+
+                        if (e.Y <= r[1] + r[3] + r[4] && e.Y > r[1] + r[3])
+                        {
+                            pictureBox1.Cursor = Cursors.SizeNS;
+                            accionMouse = 5;
+                            return;
+                        }
+                    }
+
+                    if(e.X >= r[0] - r[4] && e.X <= r[0] && e.Y >= r[1] - r[4] && e.Y <= r[1])
+                    {
+                        pictureBox1.Cursor = Cursors.SizeNWSE;
+                        accionMouse = 6;
+                        return;
+                    }
+
+                    if (e.X >= r[0] + r[2] && e.X <= r[0] + r[2] + r[4] && e.Y >= r[1] - r[4] && e.Y <= r[1])
+                    {
+                        pictureBox1.Cursor = Cursors.SizeNESW;
+                        accionMouse = 7;
+                        return;
+                    }
+
+                    if (e.X >= r[0] - r[4] && e.X <= r[0] && e.Y >= r[1] + r[3] && e.Y <= r[1] + r[3] + r[4])
+                    {
+                        pictureBox1.Cursor = Cursors.SizeNESW;
+                        accionMouse = 8;
+                        return;
+                    }
+
+                    if (e.X >= r[0] + r[2] && e.X <= r[0] + r[2] + r[4] && e.Y >= r[1] + r[3] && e.Y <= r[1] + r[3] + r[4])
+                    {
+                        pictureBox1.Cursor = Cursors.SizeNWSE;
+                        accionMouse = 9;
                         return;
                     }
                 }
-
-                dibujar = true;
-                primerPunto = e.Location;
             }
+            pictureBox1.Cursor = Cursors.Default;
+            accionMouse = -1;
         }
 
-        private void DrawPreview()
+        private void DrawPreview(int opcion)
         {
             pictureBox1.Refresh();
 
@@ -123,10 +373,7 @@ namespace Diagramador.NET
                     );
                     break;
 
-                case 4:
-                case 5:
-                case 6:
-                case 7:
+                default:
                     pictureBox1.CreateGraphics().DrawLine(
                         preDibujo(opcion),
                         primerPunto,
@@ -136,222 +383,130 @@ namespace Diagramador.NET
             }
         }
 
-
-        private void Draw(object sender, MouseEventArgs e)
-        {
-            if (drag)
-            {
-                Point primerPunto = new Point(), actualPunto = new Point();
-                primerPunto.X = e.X < previous.X ? figura[0] - Math.Abs(e.X - previous.X) : figura[0] + Math.Abs(e.X - previous.X);
-                primerPunto.Y = e.Y < previous.Y ? figura[1] - Math.Abs(e.Y - previous.Y) : figura[1] + Math.Abs(e.Y - previous.Y);
-
-                actualPunto.X = primerPunto.X + figura[2]; actualPunto.Y = primerPunto.Y + figura[3];
-
-                foreach (var r in figuras)
-                {
-                    if (r[0] != figura[0] && r[1] != figura[1] && 
-                        (
-                            figura[5] < 4 && r[5] < 4 &&
-                            (
-                                (r[1] - r[4] > primerPunto.Y && 
-                                    (
-                                        actualPunto.Y > r[1] - r[4] && 
-                                        (
-                                            (r[0] - r[4] < actualPunto.X && primerPunto.X < r[0]) || 
-                                            (r[0] + r[2] + r[4] > actualPunto.X && primerPunto.X > r[0] + r[2]) || 
-                                            (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) 
-                                        )
-                                    )
-                                ) || //o...
-                                (r[1] + r[3] + r[4] < actualPunto.Y && 
-                                    (
-                                        primerPunto.Y < r[1] + r[3] + r[4] && 
-                                        (
-                                            (r[0] - r[4] < actualPunto.X && primerPunto.X < r[0]) || 
-                                            (r[0] + r[2] + r[4] > actualPunto.X && primerPunto.X > r[0] + r[2]) || 
-                                            (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) 
-                                        )
-                                    )
-                                ) || //o...
-                                primerPunto.Y > r[1] - r[4] && primerPunto.Y < r[1] + r[3] + r[4] && 
-                                (
-                                    (primerPunto.X < r[0] - r[4] && actualPunto.X > r[0] - r[4]) ||
-                                    (actualPunto.X > r[0] + r[2] + r[4] && primerPunto.X < r[0] + r[2] + r[4])
-                                )
-                            )
-                        )
-                    ) return;
-                }
-                this.primerPunto = primerPunto;
-                this.actualPunto = actualPunto;
-                DrawPreview();
-                return;
-            }
-
-            if (dibujar)
-            {
-                foreach (var r in figuras)
-                {
-                    if (opcion < 4 && r[5] < 4 &&
-                        (
-                            (r[1] - r[4] > primerPunto.Y && //se hizo clic arriba del recangulo colisionado y
-                                (
-                                    e.Y > r[1] - r[4] && //mouse apoyado debajo del lado superior del recangulo colisionado y
-                                    (
-                                        (r[0] - r[4] < e.X && primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
-                                        (r[0] + r[2] + r[4] > e.X && primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
-                                        (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
-                                    )
-                                )
-                            ) || //o...
-                            (r[1] + r[3] + r[4] < primerPunto.Y && //se hizo clic abajo del recangulo colisionado y
-                                (
-                                    e.Y < r[1] + r[3] + r[4] && //mouse apoyado encima del lado inferior del recangulo colisionado y
-                                    (
-                                        (r[0] - r[4] < e.X && primerPunto.X < r[0]) || //mouse apoyado a la derecha del lado izquierdo del rectangulo y se hizo clic a su izquierda o
-                                        (r[0] + r[2] + r[4] > e.X && primerPunto.X > r[0] + r[2]) || //mouse apoyado a la izquierda del lado derecho del rectangulo y se hizo clic a su derecha o
-                                        (primerPunto.X > r[0] - r[4] && primerPunto.X < r[0] + r[2] + r[4]) //se hizo clic directamente arriba o abajo del rectangulo
-                                    )
-                                )
-                            ) || //o...
-                            primerPunto.Y > r[1] - r[4] && primerPunto.Y < r[1] + r[3] + r[4] && //se hizo clic directamente a un costado del tectangulo y
-                            (
-                                (primerPunto.X < r[0] - r[4] && e.X > r[0] - r[4]) || //se hizo clic a la izquierda del rectangulo y mouse apoyado a la derecha del lado izquierda o
-                                (primerPunto.X > r[0] + r[2] + r[4] && e.X < r[0] + r[2] + r[4]) //se hizo clic a la derecha del rectangulo y mouse apoyado a la izquierda del lado derecho 
-                            )
-                        )
-                    ) return;
-                }
-
-                actualPunto = e.Location;
-                DrawPreview();
-            }
-        }
-
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
             {
-                BorrarFigura(e.Location);
-                return;
-            }
+                foreach(var r in figuras)
+                {
+                    if (InsideFigura(r, e.Location))
+                    {
+                        figura = new int[] {
+                            r[0], //X
+                            r[1], //Y
+                            r[2], //width
+                            r[3], //height
+                            r[4], //grosor de linea de la figura (PenWidth)
+                            r[5], //tipo de figura (rectangulo, elipse, etc)
+                            figuras.IndexOf(r) //indice de la figura en la lista (para el color)
+                        };
+                        BorrarFigura();
+                        return;
+                    }
+                }
 
-            if (dibujar)
-            {
-                DibujarFigura(opcion, colorDialog1.Color);
-                pictureBox1.Refresh();
-            }
-            if (drag)
-            {
-                DibujarFigura(figura[5], colores[figura[6]]);
-                BorrarFigura(new Point(figura[0] + figura[2]/2, figura[1] + figura[3]/2));
                 
-                
-
-                pictureBox1.Cursor = Cursors.Arrow;
             }
 
-            dibujar = drag = false;
+            switch(accionMouse)
+            {
+                case 0:
+                    DibujarFigura(opcion, colorDialog1.Color);
+                    pictureBox1.Refresh();
+                    break;
 
+                default:
+                    DibujarFigura(figura[5], colores[figura[6]]);
+                    BorrarFigura();
+                    pictureBox1.Cursor = Cursors.Arrow;
+                    break;
+            }
+            accionMouse = -1;
         }
 
-        private void BorrarFigura(Point location)
+        private void BorrarFigura()
         {
-            int index = -1;
             Pen pen = new Pen(pictureBox1.BackColor);
             SolidBrush brush = new SolidBrush(pictureBox1.BackColor);
 
-            foreach (var r in figuras)
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                if (InsideFigura(r, location))
+                switch (figura[5])
                 {
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        switch (r[5])
+                    case 0:
+                        pen.Width = figura[4];
+                        g.DrawRectangle(
+                            pen,
+                            figura[0],
+                            figura[1],
+                            figura[2],
+                            figura[3]
+                        );
+                        break;
+
+                    case 1:
+                        g.FillRectangle(
+                            brush,
+                            figura[0],
+                            figura[1],
+                            figura[2],
+                            figura[3]
+                        );
+                        break;
+
+                    case 2:
+                        pen.Width = figura[4];
+                        g.DrawEllipse(
+                            pen,
+                            figura[0],
+                            figura[1],
+                            figura[2],
+                            figura[3]
+                        );
+                        break;
+
+                    case 3:
+                        g.FillEllipse(
+                            brush,
+                            figura[0],
+                            figura[1],
+                            figura[2],
+                            figura[3]
+                        );
+                        break;
+
+                    default:
+                        pen.Width = figura[4];
+                        switch (figura[5])
                         {
-                            case 0:
-                                pen.Width = r[4];
-                                g.DrawRectangle(
-                                    pen,
-                                    r[0],
-                                    r[1],
-                                    r[2],
-                                    r[3]
-                                );
-                                break;
-
-                            case 1:
-                                g.FillRectangle(
-                                    brush,
-                                    r[0],
-                                    r[1],
-                                    r[2],
-                                    r[3]
-                                );
-                                break;
-
-                            case 2:
-                                pen.Width = r[4];
-                                g.DrawEllipse(
-                                    pen,
-                                    r[0],
-                                    r[1],
-                                    r[2],
-                                    r[3]
-                                );
-                                break;
-
-                            case 3:
-                                g.FillEllipse(
-                                    brush,
-                                    r[0],
-                                    r[1],
-                                    r[2],
-                                    r[3]
-                                );
-                                break;
-
                             case 4:
+                                pen.StartCap = LineCap.ArrowAnchor;
+                                break;
                             case 5:
+                                pen.EndCap = LineCap.ArrowAnchor;
+                                break;
                             case 6:
-                            case 7:
-                                pen.Width = r[4];
-                                switch (r[5])
-                                {
-                                    case 4:
-                                        pen.StartCap = LineCap.ArrowAnchor;
-                                        break;
-                                    case 5:
-                                        pen.EndCap = LineCap.ArrowAnchor;
-                                        break;
-                                    case 6:
-                                        pen.StartCap = pen.EndCap = LineCap.ArrowAnchor;
-                                        break;
-                                }
-                                g.DrawLine(
-                                    pen,
-                                    new Point(r[0], r[1]),
-                                    new Point(r[2], r[3])
-                                );
+                                pen.StartCap = pen.EndCap = LineCap.ArrowAnchor;
                                 break;
                         }
-                        index = figuras.IndexOf(r);
-                        g.Dispose();
-
-                    }
+                        g.DrawLine(
+                            pen,
+                            new Point(figura[0], figura[1]),
+                            new Point(figura[2], figura[3])
+                        );
+                        break;
                 }
+                g.Dispose();
+
             }
 
             pen.Dispose();
             brush.Dispose();
 
-            if (index != -1)
-            {
-                figuras.RemoveAt(index);
-                colores.RemoveAt(index);
-                pictureBox1.Refresh();
-            }
-
+            figuras.RemoveAt(figura[6]);
+            colores.RemoveAt(figura[6]);
+            pictureBox1.Refresh();
+            
             RedrawFiguras();
         }
 
@@ -417,10 +572,7 @@ namespace Diagramador.NET
                         figuras.Add(rect);
                         break;
 
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
+                    default:
                         switch (opcion)
                         {
                             case 4:
@@ -470,7 +622,7 @@ namespace Diagramador.NET
 
         private bool InsideFigura(int[] r, Point e)
         {
-            if (r[5] < 4) return r[0] <= e.X && r[1] <= e.Y && (r[0] + r[2]) >= e.X && (r[1] + r[3]) >= e.Y;
+            if (r[5] < 4) return r[0] < e.X && r[1] < e.Y && (r[0] + r[2]) > e.X && (r[1] + r[3]) > e.Y;
 
             return false; //acá debería verificarse si se toca una flecha
         }
@@ -529,10 +681,7 @@ namespace Diagramador.NET
                             );
                             break;
 
-                        case 4:
-                        case 5:
-                        case 6:
-                        case 7:
+                        default:
                             pen.Width = r[4];
                             switch (r[5])
                             {
