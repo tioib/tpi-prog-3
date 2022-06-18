@@ -15,6 +15,7 @@ namespace Diagramador.NET
 {
     public partial class Form1 : Form
     {
+        bool check = false;
         int accionMouse = -1;
 
         List<int[]> figuras = new List<int[]>();
@@ -68,6 +69,7 @@ namespace Diagramador.NET
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+            check = false;
             if (e.Button == MouseButtons.Left)
             {
                 if(accionMouse > 1)
@@ -101,7 +103,7 @@ namespace Diagramador.NET
 
                 accionMouse = 0;
                 primerPunto = e.Location;
-                Debug.WriteLine(0);
+                
             }
         }
 
@@ -147,6 +149,7 @@ namespace Diagramador.NET
 
         private void Draw(object sender, MouseEventArgs e)
         {
+            check = true;
             Point primerPunto = new Point(), actualPunto = new Point();
             switch (accionMouse)
             {
@@ -186,7 +189,7 @@ namespace Diagramador.NET
                     }
 
                     this.actualPunto = e.Location;
-                    DrawPreview(opcion);
+                    DrawPreview(opcion, colorDialog1.Color, PenWidth);
                     return;
 
                 case 1:
@@ -199,7 +202,7 @@ namespace Diagramador.NET
                     
                     this.primerPunto = primerPunto;
                     this.actualPunto = actualPunto;
-                    DrawPreview(figura[5]);
+                    DrawPreview(figura[5], colores[figura[6]], figura[4]);
                     return;
 
                 default:
@@ -260,7 +263,7 @@ namespace Diagramador.NET
                     }
                     if (CheckCollisionB(primerPunto, actualPunto)) return;
                     this.primerPunto = primerPunto; this.actualPunto = actualPunto;
-                    DrawPreview(figura[5]);
+                    DrawPreview(figura[5], colores[figura[6]], figura[4]);
                     return;
             }
 
@@ -345,7 +348,26 @@ namespace Diagramador.NET
             accionMouse = -1;
         }
 
-        private void DrawPreview(int opcion)
+        private Pen preDibujo(int linea, Color color, int PenWidth)
+        {
+            Pen pen = new Pen(color, PenWidth);
+            pen.DashStyle = DashStyle.DashDotDot;
+            switch (linea)
+            {
+                case 4:
+                    pen.StartCap = LineCap.ArrowAnchor;
+                    break;
+                case 5:
+                    pen.EndCap = LineCap.ArrowAnchor;
+                    break;
+                case 6:
+                    pen.StartCap = pen.EndCap = LineCap.ArrowAnchor;
+                    break;
+            }
+            return pen;
+        }
+
+        private void DrawPreview(int opcion, Color color, int PenWidth)
         {
             pictureBox1.Refresh();
 
@@ -354,7 +376,7 @@ namespace Diagramador.NET
                 case 0:
                 case 1:
                     pictureBox1.CreateGraphics().DrawRectangle(
-                    preDibujo(0),
+                    preDibujo(0, color, PenWidth),
                         Math.Min(primerPunto.X, actualPunto.X),
                         Math.Min(primerPunto.Y, actualPunto.Y),
                         Math.Abs(actualPunto.X - primerPunto.X),
@@ -365,7 +387,7 @@ namespace Diagramador.NET
                 case 2:
                 case 3:
                     pictureBox1.CreateGraphics().DrawEllipse(
-                    preDibujo(0),
+                    preDibujo(0, color, PenWidth),
                         Math.Min(primerPunto.X, actualPunto.X),
                         Math.Min(primerPunto.Y, actualPunto.Y),
                         Math.Abs(actualPunto.X - primerPunto.X),
@@ -375,7 +397,7 @@ namespace Diagramador.NET
 
                 default:
                     pictureBox1.CreateGraphics().DrawLine(
-                        preDibujo(opcion),
+                        preDibujo(opcion,color,PenWidth),
                         primerPunto,
                         actualPunto
                     );
@@ -404,22 +426,21 @@ namespace Diagramador.NET
                         return;
                     }
                 }
-
-                
             }
 
-            switch(accionMouse)
+            if(check)
             {
-                case 0:
+                if (accionMouse == 0)
+                {
                     DibujarFigura(opcion, colorDialog1.Color);
                     pictureBox1.Refresh();
-                    break;
-
-                default:
+                }
+                else
+                {
                     DibujarFigura(figura[5], colores[figura[6]]);
                     BorrarFigura();
-                    pictureBox1.Cursor = Cursors.Arrow;
-                    break;
+                    pictureBox1.Cursor = Cursors.Default;
+                }
             }
             accionMouse = -1;
         }
@@ -596,29 +617,9 @@ namespace Diagramador.NET
                 pen.Dispose();
                 brush.Dispose();
                 g.Dispose();
-                colores.Add(colorDialog1.Color);
+                colores.Add(color);
             }
         }
-
-        private Pen preDibujo(int linea)
-        {
-            Pen pen = new Pen(colorDialog1.Color, PenWidth);
-            pen.DashStyle = DashStyle.DashDotDot;
-            switch (linea)
-            {
-                case 4:
-                    pen.StartCap = LineCap.ArrowAnchor;
-                    break;
-                case 5:
-                    pen.EndCap = LineCap.ArrowAnchor;
-                    break;
-                case 6:
-                    pen.StartCap = pen.EndCap = LineCap.ArrowAnchor;
-                    break;
-            }
-            return pen;
-        }
-
 
         private bool InsideFigura(int[] r, Point e)
         {
