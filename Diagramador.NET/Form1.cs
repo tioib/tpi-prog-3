@@ -101,7 +101,6 @@ namespace Diagramador.NET
 
                 accionMouse = 0;
                 primerPunto = e.Location;
-                Debug.WriteLine(0);
             }
         }
 
@@ -411,12 +410,12 @@ namespace Diagramador.NET
             switch(accionMouse)
             {
                 case 0:
-                    DibujarFigura(opcion, colorDialog1.Color);
+                    DibujarFigura(opcion, colorDialog1.Color, PenWidth);
                     pictureBox1.Refresh();
                     break;
 
                 default:
-                    DibujarFigura(figura[5], colores[figura[6]]);
+                    DibujarFigura(figura[5], colores[figura[6]], figura[4]);
                     BorrarFigura();
                     pictureBox1.Cursor = Cursors.Arrow;
                     break;
@@ -510,7 +509,7 @@ namespace Diagramador.NET
             RedrawFiguras();
         }
 
-        private void DibujarFigura(int opcion, Color color)
+        private void DibujarFigura(int opcion, Color color,int PenWidth)
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -724,10 +723,5 @@ namespace Diagramador.NET
             }
             
         }
-
-
-        
-
-       
     }
 }
