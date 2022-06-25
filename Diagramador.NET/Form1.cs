@@ -60,8 +60,6 @@ namespace Diagramador.NET
             pictureBox2.BackColor = colorDialog1.Color;
         }
 
-       
-
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             check = false;
@@ -104,9 +102,12 @@ namespace Diagramador.NET
                     }
                 }
 
+                foreach(var r in figuras)
+                {
+                    if (InsideFigura(r, e.Location)) return;
+                }
                 accionMouse = 0;
                 primerPunto = e.Location;
-                
             }
         }
 
