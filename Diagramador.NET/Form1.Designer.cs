@@ -34,6 +34,7 @@
             this.cargarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.color = new System.Windows.Forms.Button();
@@ -48,16 +49,15 @@
             this.flechaNone = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.botones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -125,6 +125,14 @@
             this.splitContainer.SplitterDistance = 166;
             this.splitContainer.TabIndex = 3;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Location = new System.Drawing.Point(46, 473);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(76, 31);
+            this.pictureBox2.TabIndex = 1;
+            this.pictureBox2.TabStop = false;
+            // 
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(34, 555);
@@ -136,7 +144,7 @@
             0,
             0,
             0});
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.ChangeSize);
+
             // 
             // label1
             // 
@@ -174,7 +182,8 @@
             // 
             // rect
             // 
-            this.rect.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rect.Location = new System.Drawing.Point(3, 3);
             this.rect.Name = "rect";
             this.rect.Size = new System.Drawing.Size(134, 52);
@@ -184,7 +193,8 @@
             // 
             // rectFill
             // 
-            this.rectFill.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rectFill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rectFill.Location = new System.Drawing.Point(3, 61);
             this.rectFill.Name = "rectFill";
             this.rectFill.Size = new System.Drawing.Size(134, 52);
@@ -194,7 +204,8 @@
             // 
             // circle
             // 
-            this.circle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.circle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.circle.Location = new System.Drawing.Point(3, 119);
             this.circle.Name = "circle";
             this.circle.Size = new System.Drawing.Size(134, 52);
@@ -204,7 +215,8 @@
             // 
             // circFill
             // 
-            this.circFill.Dock = System.Windows.Forms.DockStyle.Top;
+            this.circFill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.circFill.Location = new System.Drawing.Point(3, 177);
             this.circFill.Name = "circFill";
             this.circFill.Size = new System.Drawing.Size(134, 52);
@@ -214,7 +226,8 @@
             // 
             // flechaLeft
             // 
-            this.flechaLeft.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flechaLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flechaLeft.Location = new System.Drawing.Point(3, 235);
             this.flechaLeft.Name = "flechaLeft";
             this.flechaLeft.Size = new System.Drawing.Size(134, 52);
@@ -224,7 +237,8 @@
             // 
             // flechaRight
             // 
-            this.flechaRight.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flechaRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flechaRight.Location = new System.Drawing.Point(3, 293);
             this.flechaRight.Name = "flechaRight";
             this.flechaRight.Size = new System.Drawing.Size(134, 52);
@@ -234,7 +248,8 @@
             // 
             // flechaBoth
             // 
-            this.flechaBoth.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flechaBoth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flechaBoth.Location = new System.Drawing.Point(3, 351);
             this.flechaBoth.Name = "flechaBoth";
             this.flechaBoth.Size = new System.Drawing.Size(134, 52);
@@ -244,7 +259,8 @@
             // 
             // flechaNone
             // 
-            this.flechaNone.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flechaNone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flechaNone.Location = new System.Drawing.Point(3, 409);
             this.flechaNone.Name = "flechaNone";
             this.flechaNone.Size = new System.Drawing.Size(134, 52);
@@ -270,14 +286,6 @@
             // 
             this.colorDialog1.SolidColorOnly = true;
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Location = new System.Drawing.Point(46, 473);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(76, 31);
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -296,10 +304,10 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.botones.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

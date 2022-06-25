@@ -24,7 +24,7 @@ namespace Diagramador.NET
         int[] figura;
 
         Bitmap bmp;
-        private int PenWidth = 5, opcion = 0;
+        private int opcion = 0;
         Point primerPunto, actualPunto, previous;
 
         public Form1()
@@ -60,12 +60,7 @@ namespace Diagramador.NET
             pictureBox2.BackColor = colorDialog1.Color;
         }
 
-        
-
-        private void ChangeSize(object sender, EventArgs e)
-        {
-            PenWidth = (int)numericUpDown1.Value;
-        }
+       
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -75,9 +70,14 @@ namespace Diagramador.NET
                 if(accionMouse > 1)
                 {
                     primerPunto = new Point(figura[0], figura[1]);
-                    actualPunto = new Point(figura[0] + figura[2], figura[1] + figura[3]);
+                    if(accionMouse > 9)
+                    {
+                        actualPunto = new Point(figura[2], figura[3]);
+                        pictureBox1.Cursor = Cursors.Cross;
+                    }
+                    else actualPunto = new Point(figura[0] + figura[2], figura[1] + figura[3]);
                     accionMouse += 10;
-
+                    Debug.WriteLine(accionMouse);
                     return;
                 }
 
@@ -85,19 +85,22 @@ namespace Diagramador.NET
                 {
                     if (InsideFigura(r, e.Location))
                     {
-                        accionMouse = 1;
-                        pictureBox1.Cursor = Cursors.Cross;
-                        figura = new int[] {
-                            r[0], //X
-                            r[1], //Y
-                            r[2], //width
-                            r[3], //height
-                            r[4], //grosor de linea de la figura (PenWidth)
-                            r[5], //tipo de figura (rectangulo, elipse, etc)
-                            figuras.IndexOf(r) //indice de la figura en la lista (para el color)
-                        };
-                        actualPunto = previous = e.Location;
-                        return;
+                        if(r[5]<4)
+                        {
+                            accionMouse = 1;
+                            pictureBox1.Cursor = Cursors.Cross;
+                            figura = new int[] {
+                                r[0], //X
+                                r[1], //Y
+                                r[2], //width
+                                r[3], //height
+                                r[4], //grosor de linea de la figura (PenWidth)
+                                r[5], //tipo de figura (rectangulo, elipse, etc)
+                                figuras.IndexOf(r) //indice de la figura en la lista (para el color)
+                            };
+                            actualPunto = previous = e.Location;
+                            return;
+                        }
                     }
                 }
 
@@ -107,11 +110,14 @@ namespace Diagramador.NET
             }
         }
 
-        private bool CheckCollisionB(Point primerPunto, Point actualPunto)
+        private bool CheckCollisionB(Point primerPunto, Point actualPunto, Point mouse)
         {
+
             foreach (var r in figuras)
             {
-                if (r[0] != figura[0] && r[1] != figura[1] &&
+                if(r[0] != figura[0])
+                {
+                    if (r[1] != figura[1] &&
                     (
                         figura[5] < 4 && r[5] < 4 &&
                         (
@@ -141,8 +147,9 @@ namespace Diagramador.NET
                                 (actualPunto.X > r[0] + r[2] + r[4] && primerPunto.X < r[0] + r[2] + r[4])
                             )
                         )
-                    )
-                ) return true;
+                    )) return true;
+                    if (InsideFigura(r, mouse)) return true;
+                }
             }
             return false;
         }
@@ -153,11 +160,11 @@ namespace Diagramador.NET
             Point primerPunto = new Point(), actualPunto = new Point();
             switch (accionMouse)
             {
-                case -1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: break;
+                case -1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: break;
                 case 0:
                     foreach (var r in figuras)
                     {
-                        if (opcion < 4 && r[5] < 4 &&
+                        if (r[5] < 4 &&
                             (
                                 (r[1] - r[4] > this.primerPunto.Y && //se hizo clic arriba del recangulo colisionado y
                                     (
@@ -186,23 +193,29 @@ namespace Diagramador.NET
                                 )
                             )
                         ) return;
+                        if(InsideFigura(r,e.Location)) return;
                     }
 
                     this.actualPunto = e.Location;
-                    DrawPreview(opcion, colorDialog1.Color, PenWidth);
+                    DrawPreview(opcion, colorDialog1.Color, (int)numericUpDown1.Value);
                     return;
 
                 case 1:
-                    primerPunto.X = e.X < previous.X ? figura[0] - Math.Abs(e.X - previous.X) : figura[0] + Math.Abs(e.X - previous.X);
-                    primerPunto.Y = e.Y < previous.Y ? figura[1] - Math.Abs(e.Y - previous.Y) : figura[1] + Math.Abs(e.Y - previous.Y);
+                    if(figura[5] < 4)
+                    {
+                        primerPunto.X = e.X < previous.X ? figura[0] - Math.Abs(e.X - previous.X) : figura[0] + Math.Abs(e.X - previous.X);
+                        primerPunto.Y = e.Y < previous.Y ? figura[1] - Math.Abs(e.Y - previous.Y) : figura[1] + Math.Abs(e.Y - previous.Y);
 
-                    actualPunto.X = primerPunto.X + figura[2]; actualPunto.Y = primerPunto.Y + figura[3];
+                        actualPunto.X = primerPunto.X + figura[2]; actualPunto.Y = primerPunto.Y + figura[3];
 
-                    if (CheckCollisionB(primerPunto,actualPunto)) return;
+                        if (CheckCollisionB(primerPunto, actualPunto, e.Location)) return;
+
+                        this.primerPunto = primerPunto;
+                        this.actualPunto = actualPunto;
                     
-                    this.primerPunto = primerPunto;
-                    this.actualPunto = actualPunto;
-                    DrawPreview(figura[5], colores[figura[6]], figura[4]);
+
+                        DrawPreview(figura[5], colores[figura[6]], figura[4]);
+                    }
                     return;
 
                 default:
@@ -260,8 +273,17 @@ namespace Diagramador.NET
                             actualPunto.Y = e.Y;
                             break;
 
+                        case 20:
+                            primerPunto.X = e.X;
+                            primerPunto.Y = e.Y;
+                            break;
+                        case 21:
+                            actualPunto.X = e.X;
+                            actualPunto.Y = e.Y;
+                            break;
+
                     }
-                    if (CheckCollisionB(primerPunto, actualPunto)) return;
+                    if (CheckCollisionB(primerPunto, actualPunto,e.Location)) return;
                     this.primerPunto = primerPunto; this.actualPunto = actualPunto;
                     DrawPreview(figura[5], colores[figura[6]], figura[4]);
                     return;
@@ -269,9 +291,7 @@ namespace Diagramador.NET
 
             foreach (var r in figuras)
             {
-                if (r[5] < 4)
-                {
-                    figura = new int[] {
+                figura = new int[] {
                             r[0],
                             r[1],
                             r[2],
@@ -280,7 +300,8 @@ namespace Diagramador.NET
                             r[5],
                             figuras.IndexOf(r)
                         };
-
+                if (r[5] < 4)
+                {
                     if (e.Y > r[1] && e.Y < r[1] + r[3])
                     {
                         if (e.X >= r[0] - r[4] && e.X < r[0])
@@ -342,6 +363,18 @@ namespace Diagramador.NET
                         accionMouse = 9;
                         return;
                     }
+                }
+                else if(e.X >= r[0] - r[4] && e.X <= r[0] + r[4] && e.Y >= r[1] - r[4] && e.Y <= r[1] + r[4]) 
+                {
+                    pictureBox1.Cursor = Cursors.Hand;
+                    accionMouse = 10;
+                    return;
+                }
+                else if(e.X >= r[2] - r[4] && e.X <= r[2] + r[4] && e.Y >= r[3] - r[4] && e.Y <= r[3] + r[4])
+                {
+                    pictureBox1.Cursor = Cursors.Hand;
+                    accionMouse = 11;
+                    return;
                 }
             }
             pictureBox1.Cursor = Cursors.Default;
@@ -541,11 +574,11 @@ namespace Diagramador.NET
                         Math.Min(primerPunto.Y, actualPunto.Y),
                         Math.Abs(actualPunto.X - primerPunto.X),
                         Math.Abs(actualPunto.Y - primerPunto.Y),
-                        PenWidth,
+                        (int)numericUpDown1.Value,
                         opcion
                 };
 
-                Pen pen = new Pen(color, PenWidth);
+                Pen pen = new Pen(color, (int)numericUpDown1.Value);
                 SolidBrush brush = new SolidBrush(color);
                 switch (opcion)
                 {
@@ -611,7 +644,7 @@ namespace Diagramador.NET
                             primerPunto,
                             actualPunto
                         );
-                        figuras.Add(new int[] { primerPunto.X, primerPunto.Y, actualPunto.X, actualPunto.Y, PenWidth, opcion });
+                        figuras.Add(new int[] { primerPunto.X, primerPunto.Y, actualPunto.X, actualPunto.Y, (int)numericUpDown1.Value, opcion });
                         break;
                 }
                 pen.Dispose();
@@ -625,8 +658,17 @@ namespace Diagramador.NET
         {
             if (r[5] < 4) return r[0] < e.X && r[1] < e.Y && (r[0] + r[2]) > e.X && (r[1] + r[3]) > e.Y;
 
-            return false; //acá debería verificarse si se toca una flecha
+            using(var path = new GraphicsPath())
+            {
+                using(var pen = new Pen(Color.Transparent, r[5]))
+                {
+                    path.AddLine(new Point(r[0],r[1]),new Point(r[2],r[3]));
+                    return path.IsOutlineVisible(e, pen);
+                }
+            }
         }
+
+        
 
         private void RedrawFiguras()
         {
