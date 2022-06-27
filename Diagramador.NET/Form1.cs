@@ -18,7 +18,7 @@ namespace Diagramador.NET
         Save save = new Save();
 
         int[] figura;
-
+     
         Bitmap bmp;
         private int opcion = 0;
         Point primerPunto, actualPunto, previous;
@@ -763,7 +763,7 @@ namespace Diagramador.NET
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             pictureBox1.Size = splitContainer.Panel2.ClientSize;
-            if(bmp != null)
+            if (bmp != null)
             {
                 bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
                 pictureBox1.Image = bmp;
