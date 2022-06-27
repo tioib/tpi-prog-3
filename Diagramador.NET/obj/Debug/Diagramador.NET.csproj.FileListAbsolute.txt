@@ -20,3 +20,14 @@ C:\Users\emanu\Desktop\TPI - PROG3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagrama
 C:\Users\emanu\Desktop\TPI - PROG3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.CoreCompileInputs.cache
 C:\Users\emanu\Desktop\TPI - PROG3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.exe
 C:\Users\emanu\Desktop\TPI - PROG3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.pdb
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Diagramador.NET.exe.config
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Diagramador.NET.exe
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Diagramador.NET.pdb
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.AssemblyReference.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.SuggestedBindingRedirects.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Form1.resources
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Properties.Resources.resources
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.GenerateResource.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.CoreCompileInputs.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.exe
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.pdb

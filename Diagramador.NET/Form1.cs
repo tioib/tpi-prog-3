@@ -22,7 +22,7 @@ namespace Diagramador.NET
         List<Color> colores = new List<Color>();
 
         int[] figura;
-
+     
         Bitmap bmp;
         private int opcion = 0;
         Point primerPunto, actualPunto, previous;
@@ -669,7 +669,54 @@ namespace Diagramador.NET
             }
         }
 
-        
+        private void cargarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png",
+                Title = "Save an Image File",
+                RestoreDirectory = true
+            };
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.FileStream file = (System.IO.FileStream)saveFileDialog.OpenFile();
+
+                switch (saveFileDialog.FilterIndex)
+                {
+                    case 1:
+                        pictureBox1.Image = null;
+                        pictureBox1.Image = bmp;
+                        pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        break;
+
+                    case 2:
+                        pictureBox1.Image = null;
+                        pictureBox1.Image = bmp;
+                        pictureBox1.Image.Save(file, System.Drawing.Imaging.ImageFormat.Png);
+                        break;
+                }
+                file.Close();
+            }
+        }
+
+        private void nuevoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                AddExtension = true,
+                Multiselect = false,
+                InitialDirectory = "C://Desktop",
+                Title = "Select file to be upload",
+                Filter = "JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                bmp = (Bitmap)Bitmap.FromFile(openFileDialog.FileName);
+                pictureBox1.Image = bmp;
+            }
+            openFileDialog.Dispose();
+        }
 
         private void RedrawFiguras()
         {
@@ -759,14 +806,23 @@ namespace Diagramador.NET
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             pictureBox1.Size = splitContainer.Panel2.ClientSize;
-            if(bmp != null)
+            if (bmp != null)
             {
                 bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
                 pictureBox1.Image = bmp;
 
                 RedrawFiguras();
             }
-            
+
+            //if (pictureBox1.Image != null)
+            //{
+            //    Size size = new Size((int)Math.Round(pictureBox1.Image.Width * 0.9), (int)Math.Round(pictureBox1.Image.Height * 0.9));
+            //    pictureBox1.Image = new Bitmap(bmp, size);
+            //    bmp = (Bitmap)pictureBox1.Image;
+
+            //    RedrawFiguras();
+            //}
+
         }
 
 
