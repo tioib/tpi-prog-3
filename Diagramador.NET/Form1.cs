@@ -12,7 +12,7 @@ namespace Diagramador.NET
     public partial class Form1 : Form
     {
         bool check = false, changed = false;
-        int accionMouse = -1, cont = 0;
+        int accionMouse = -1;
         string archivo = "";
 
         Save save = new Save();
@@ -34,7 +34,8 @@ namespace Diagramador.NET
 
             saveFileDialog1.FileOk += Guardar;
             openFileDialog1.FileOk += Abrir;
-            openFileDialog1.Filter = saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave";
+            openFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave";
+            saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave|JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
 
             foreach (var b in botones.Controls) (b as Button).Click += ElegirFigura;
         }
@@ -470,7 +471,7 @@ namespace Diagramador.NET
                     DibujarFigura(opcion, colorDialog1.Color);
                     pictureBox1.Refresh();
                 }
-                else
+                else if(accionMouse != -1)
                 {
                     DibujarFigura(figura[5], Color.FromArgb(save.colores[figura[6]]));
                     BorrarFigura();
@@ -794,6 +795,19 @@ namespace Diagramador.NET
             }
         }
 
+        private void ExportarImagen()
+        {
+            using(FileStream fs = File.Open(saveFileDialog1.FileName, FileMode.OpenOrCreate))
+            if (saveFileDialog1.FilterIndex == 2)
+            {
+                pictureBox1.Image = null;
+                pictureBox1.Image = bmp;
+                pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            else
+                pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+        }
+
         private void botonGuardar_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();
@@ -801,8 +815,13 @@ namespace Diagramador.NET
 
         private void Guardar(object sender, EventArgs e)
         {
-            File.WriteAllText(archivo = saveFileDialog1.FileName,JsonSerializer.Serialize(save));
-            changed = false;
+            Debug.WriteLine(saveFileDialog1.FilterIndex);
+            if (saveFileDialog1.FilterIndex > 1) ExportarImagen();
+            else
+            {
+                File.WriteAllText(archivo = saveFileDialog1.FileName, JsonSerializer.Serialize(save));
+                changed = false;
+            }
         }
 
         private void guardarToolStripMenuItem_Click(object sender, EventArgs e)

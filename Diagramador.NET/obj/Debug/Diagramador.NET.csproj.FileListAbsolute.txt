@@ -2,7 +2,6 @@ C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\bin\Debug\Diagramado
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\bin\Debug\Diagramador.NET.exe
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\bin\Debug\Diagramador.NET.pdb
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.AssemblyReference.cache
-C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.SuggestedBindingRedirects.cache
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.Form1.resources
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.Properties.Resources.resources
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.GenerateResource.cache
