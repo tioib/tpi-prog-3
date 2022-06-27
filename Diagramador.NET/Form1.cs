@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
-
+using System.Text.Json;
+using System.IO;
 
 namespace Diagramador.NET
 {
     public partial class Form1 : Form
     {
-        bool check = false;
-        int accionMouse = -1;
+        bool check = false, changed = false;
+        int accionMouse = -1, cont = 0;
+        string archivo = "";
 
-        List<int[]> figuras = new List<int[]>();
-        List<Color> colores = new List<Color>();
+        Save save = new Save();
 
         int[] figura;
 
@@ -35,6 +31,10 @@ namespace Diagramador.NET
             pictureBox1.Image = bmp;
             pictureBox1.Size = new Size(panel2.ClientSize.Width, panel2.ClientSize.Height);
             pictureBox2.BackColor = colorDialog1.Color = Color.Black;
+
+            saveFileDialog1.FileOk += Guardar;
+            openFileDialog1.FileOk += Abrir;
+            openFileDialog1.Filter = saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave";
 
             foreach (var b in botones.Controls) (b as Button).Click += ElegirFigura;
         }
@@ -79,7 +79,7 @@ namespace Diagramador.NET
                     return;
                 }
 
-                foreach (var r in figuras)
+                foreach (var r in save.figuras)
                 {
                     if (InsideFigura(r, e.Location))
                     {
@@ -94,7 +94,7 @@ namespace Diagramador.NET
                                 r[3], //height
                                 r[4], //grosor de linea de la figura (PenWidth)
                                 r[5], //tipo de figura (rectangulo, elipse, etc)
-                                figuras.IndexOf(r) //indice de la figura en la lista (para el color)
+                                save.figuras.IndexOf(r) //indice de la figura en la lista (para el color)
                             };
                             actualPunto = previous = e.Location;
                             return;
@@ -102,7 +102,7 @@ namespace Diagramador.NET
                     }
                 }
 
-                foreach(var r in figuras)
+                foreach(var r in save.figuras)
                 {
                     if (InsideFigura(r, e.Location)) return;
                 }
@@ -114,7 +114,7 @@ namespace Diagramador.NET
         private bool CheckCollisionB(Point primerPunto, Point actualPunto, Point mouse)
         {
 
-            foreach (var r in figuras)
+            foreach (var r in save.figuras)
             {
                 if(r[0] != figura[0])
                 {
@@ -163,7 +163,7 @@ namespace Diagramador.NET
             {
                 case -1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: break;
                 case 0:
-                    foreach (var r in figuras)
+                    foreach (var r in save.figuras)
                     {
                         if (r[5] < 4 &&
                             (
@@ -215,7 +215,7 @@ namespace Diagramador.NET
                         this.actualPunto = actualPunto;
                     
 
-                        DrawPreview(figura[5], colores[figura[6]], figura[4]);
+                        DrawPreview(figura[5], Color.FromArgb(save.colores[figura[6]]), figura[4]);
                     }
                     return;
 
@@ -286,11 +286,11 @@ namespace Diagramador.NET
                     }
                     if (CheckCollisionB(primerPunto, actualPunto,e.Location)) return;
                     this.primerPunto = primerPunto; this.actualPunto = actualPunto;
-                    DrawPreview(figura[5], colores[figura[6]], figura[4]);
+                    DrawPreview(figura[5], Color.FromArgb(save.colores[figura[6]]), figura[4]);
                     return;
             }
 
-            foreach (var r in figuras)
+            foreach (var r in save.figuras)
             {
                 figura = new int[] {
                             r[0],
@@ -299,7 +299,7 @@ namespace Diagramador.NET
                             r[3],
                             r[4],
                             r[5],
-                            figuras.IndexOf(r)
+                            save.figuras.IndexOf(r)
                         };
                 if (r[5] < 4)
                 {
@@ -443,7 +443,7 @@ namespace Diagramador.NET
         {
             if (e.Button != MouseButtons.Left)
             {
-                foreach(var r in figuras)
+                foreach(var r in save.figuras)
                 {
                     if (InsideFigura(r, e.Location))
                     {
@@ -454,9 +454,10 @@ namespace Diagramador.NET
                             r[3], //height
                             r[4], //grosor de linea de la figura (PenWidth)
                             r[5], //tipo de figura (rectangulo, elipse, etc)
-                            figuras.IndexOf(r) //indice de la figura en la lista (para el color)
+                            save.figuras.IndexOf(r) //indice de la figura en la lista (para el color)
                         };
                         BorrarFigura();
+                        changed = true;
                         return;
                     }
                 }
@@ -471,13 +472,15 @@ namespace Diagramador.NET
                 }
                 else
                 {
-                    DibujarFigura(figura[5], colores[figura[6]]);
+                    DibujarFigura(figura[5], Color.FromArgb(save.colores[figura[6]]));
                     BorrarFigura();
                     pictureBox1.Cursor = Cursors.Default;
                 }
+                changed = true;
             }
             accionMouse = -1;
         }
+
 
         private void BorrarFigura()
         {
@@ -558,11 +561,11 @@ namespace Diagramador.NET
             pen.Dispose();
             brush.Dispose();
 
-            figuras.RemoveAt(figura[6]);
-            colores.RemoveAt(figura[6]);
-            pictureBox1.Refresh();
-            
+            save.figuras.RemoveAt(figura[6]);
+            save.colores.RemoveAt(figura[6]);
+
             RedrawFiguras();
+            pictureBox1.Refresh();
         }
 
         private void DibujarFigura(int opcion, Color color)
@@ -591,7 +594,7 @@ namespace Diagramador.NET
                             rect[2],
                             rect[3]
                         );
-                        figuras.Add(rect);
+                        save.figuras.Add(rect);
                         break;
 
                     case 1:
@@ -602,7 +605,7 @@ namespace Diagramador.NET
                             rect[2],
                             rect[3]
                         );
-                        figuras.Add(rect);
+                        save.figuras.Add(rect);
                         break;
 
                     case 2:
@@ -613,7 +616,7 @@ namespace Diagramador.NET
                             rect[2],
                             rect[3]
                         );
-                        figuras.Add(rect);
+                        save.figuras.Add(rect);
                         break;
 
                     case 3:
@@ -624,7 +627,7 @@ namespace Diagramador.NET
                             rect[2],
                             rect[3]
                         );
-                        figuras.Add(rect);
+                        save.figuras.Add(rect);
                         break;
 
                     default:
@@ -645,13 +648,13 @@ namespace Diagramador.NET
                             primerPunto,
                             actualPunto
                         );
-                        figuras.Add(new int[] { primerPunto.X, primerPunto.Y, actualPunto.X, actualPunto.Y, (int)numericUpDown1.Value, opcion });
+                        save.figuras.Add(new int[] { primerPunto.X, primerPunto.Y, actualPunto.X, actualPunto.Y, (int)numericUpDown1.Value, opcion });
                         break;
                 }
                 pen.Dispose();
                 brush.Dispose();
                 g.Dispose();
-                colores.Add(color);
+                save.colores.Add(color.ToArgb());
             }
         }
 
@@ -669,15 +672,17 @@ namespace Diagramador.NET
             }
         }
 
+
+        
         
 
         private void RedrawFiguras()
         {
-            for (int i = 0; i < figuras.Count; i++)
+            for (int i = 0; i < save.figuras.Count; i++)
             {
-                var r = figuras[i];
-                Pen pen = new Pen(colores[i]);
-                SolidBrush brush = new SolidBrush(colores[i]);
+                var r = save.figuras[i];
+                Pen pen = new Pen(Color.FromArgb(save.colores[i]));
+                SolidBrush brush = new SolidBrush(Color.FromArgb(save.colores[i]));
 
                 using (Graphics g = Graphics.FromImage(bmp))
                 {
@@ -750,8 +755,6 @@ namespace Diagramador.NET
                     g.Dispose();
                     pen.Dispose();
                     brush.Dispose();
-
-                    pictureBox1.Refresh();
                 }
             }
         }
@@ -770,8 +773,84 @@ namespace Diagramador.NET
         }
 
 
-        
+        private void botonAbrir_Click(object sender, EventArgs e)
+        {
+            if(CheckChange(sender, e)) openFileDialog1.ShowDialog();
+        }
 
-       
+        private void Abrir(object sebder, EventArgs e)
+        {
+            var save = JsonSerializer.Deserialize<Save>(File.ReadAllText(openFileDialog1.FileName));
+            if (save != null)
+            {
+                Debug.WriteLine("");
+                bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+                pictureBox1.Image = bmp;
+                archivo = openFileDialog1.FileName;
+                this.save = save;
+                RedrawFiguras();
+                changed = false;
+
+            }
+        }
+
+        private void botonGuardar_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+        }
+
+        private void Guardar(object sender, EventArgs e)
+        {
+            File.WriteAllText(archivo = saveFileDialog1.FileName,JsonSerializer.Serialize(save));
+            changed = false;
+        }
+
+        private void guardarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(archivo == "")
+                saveFileDialog1.ShowDialog();
+            else
+            {
+                File.WriteAllText(archivo, JsonSerializer.Serialize(save));
+                MessageBox.Show("Diagrama guardado en:\n"+archivo);
+            }
+            changed = false;
+        }
+
+        private void botonNuevo_Click(object sender, EventArgs e)
+        {
+            if(CheckChange(sender,e))
+            {
+                save.Clear();
+                bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+                pictureBox1.Image = bmp;
+                changed = false;
+            }
+        }
+
+        private bool CheckChange(object sender, EventArgs e)
+        {
+            if (changed)
+            {
+                switch (MessageBox.Show("Cambios realizados, ¿desea guardar el diagrama?", "Alerta", MessageBoxButtons.YesNoCancel))
+                {
+                    case DialogResult.Yes:
+                        botonGuardar_Click(sender, e);
+                        break;
+
+                    case DialogResult.Cancel:
+                        return false;
+
+                }
+                return true;
+            }
+            else return true;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            CheckChange(this, e);
+            base.OnClosing(e);
+        }
     }
 }

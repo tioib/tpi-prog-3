@@ -30,9 +30,9 @@
         {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cargarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.botonAbrir = new System.Windows.Forms.ToolStripMenuItem();
+            this.botonGuardar = new System.Windows.Forms.ToolStripMenuItem();
+            this.botonNuevo = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -49,6 +49,10 @@
             this.flechaNone = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -68,42 +72,46 @@
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(950, 28);
+            this.menuStrip.Size = new System.Drawing.Size(950, 30);
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip2";
             // 
             // archivoToolStripMenuItem
             // 
             this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nuevoToolStripMenuItem,
-            this.cargarToolStripMenuItem,
-            this.guardarToolStripMenuItem});
+            this.botonNuevo,
+            this.botonAbrir,
+            this.guardarToolStripMenuItem,
+            this.botonGuardar});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
             this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.archivoToolStripMenuItem.Text = "Archivo";
             // 
-            // nuevoToolStripMenuItem
+            // botonAbrir
             // 
-            this.nuevoToolStripMenuItem.Name = "nuevoToolStripMenuItem";
-            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
-            this.nuevoToolStripMenuItem.Text = "Abrir";
+            this.botonAbrir.Name = "botonAbrir";
+            this.botonAbrir.Size = new System.Drawing.Size(224, 26);
+            this.botonAbrir.Text = "Abrir";
+            this.botonAbrir.Click += new System.EventHandler(this.botonAbrir_Click);
             // 
-            // cargarToolStripMenuItem
+            // botonGuardar
             // 
-            this.cargarToolStripMenuItem.Name = "cargarToolStripMenuItem";
-            this.cargarToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
-            this.cargarToolStripMenuItem.Text = "Guardar";
+            this.botonGuardar.Name = "botonGuardar";
+            this.botonGuardar.Size = new System.Drawing.Size(224, 26);
+            this.botonGuardar.Text = "Guardar como";
+            this.botonGuardar.Click += new System.EventHandler(this.botonGuardar_Click);
             // 
-            // guardarToolStripMenuItem
+            // botonNuevo
             // 
-            this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(145, 26);
-            this.guardarToolStripMenuItem.Text = "Nuevo";
+            this.botonNuevo.Name = "botonNuevo";
+            this.botonNuevo.Size = new System.Drawing.Size(224, 26);
+            this.botonNuevo.Text = "Nuevo";
+            this.botonNuevo.Click += new System.EventHandler(this.botonNuevo_Click);
             // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer.Location = new System.Drawing.Point(0, 30);
             this.splitContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitContainer.Name = "splitContainer";
             // 
@@ -121,7 +129,7 @@
             this.splitContainer.Panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.splitContainer.Panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Draw);
             this.splitContainer.Panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
-            this.splitContainer.Size = new System.Drawing.Size(950, 598);
+            this.splitContainer.Size = new System.Drawing.Size(950, 596);
             this.splitContainer.SplitterDistance = 166;
             this.splitContainer.TabIndex = 3;
             // 
@@ -144,7 +152,6 @@
             0,
             0,
             0});
-
             // 
             // label1
             // 
@@ -275,7 +282,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(776, 598);
+            this.pictureBox1.Size = new System.Drawing.Size(776, 596);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
@@ -286,6 +293,17 @@
             // 
             this.colorDialog1.SolidColorOnly = true;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // guardarToolStripMenuItem
+            // 
+            this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarToolStripMenuItem.Text = "Guardar";
+            this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -295,7 +313,7 @@
             this.Controls.Add(this.menuStrip);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Diagramador.NET";
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -317,9 +335,9 @@
 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nuevoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cargarToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem guardarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem botonAbrir;
+        private System.Windows.Forms.ToolStripMenuItem botonGuardar;
+        private System.Windows.Forms.ToolStripMenuItem botonNuevo;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.FlowLayoutPanel botones;
@@ -336,6 +354,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button color;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem guardarToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
