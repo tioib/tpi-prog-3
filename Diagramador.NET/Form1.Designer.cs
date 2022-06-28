@@ -30,9 +30,10 @@
         {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.botonAbrir = new System.Windows.Forms.ToolStripMenuItem();
-            this.botonGuardar = new System.Windows.Forms.ToolStripMenuItem();
             this.botonNuevo = new System.Windows.Forms.ToolStripMenuItem();
+            this.botonAbrir = new System.Windows.Forms.ToolStripMenuItem();
+            this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.botonGuardar = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -51,7 +52,6 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -71,10 +71,8 @@
             this.archivoToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-
-            this.menuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(950, 30);
-
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.menuStrip.Size = new System.Drawing.Size(949, 28);
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip2";
             // 
@@ -86,43 +84,42 @@
             this.guardarToolStripMenuItem,
             this.botonGuardar});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
-            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.archivoToolStripMenuItem.Text = "Archivo";
-            // 
-            // botonAbrir
-            // 
-
-            this.botonAbrir.Name = "botonAbrir";
-            this.botonAbrir.Size = new System.Drawing.Size(224, 26);
-            this.botonAbrir.Text = "Abrir";
-            this.botonAbrir.Click += new System.EventHandler(this.botonAbrir_Click);
-
-            // 
-            // botonGuardar
-            // 
-
-            this.botonGuardar.Name = "botonGuardar";
-            this.botonGuardar.Size = new System.Drawing.Size(224, 26);
-            this.botonGuardar.Text = "Guardar como";
-            this.botonGuardar.Click += new System.EventHandler(this.botonGuardar_Click);
-
             // 
             // botonNuevo
             // 
-
             this.botonNuevo.Name = "botonNuevo";
-            this.botonNuevo.Size = new System.Drawing.Size(224, 26);
+            this.botonNuevo.Size = new System.Drawing.Size(187, 26);
             this.botonNuevo.Text = "Nuevo";
             this.botonNuevo.Click += new System.EventHandler(this.botonNuevo_Click);
-
+            // 
+            // botonAbrir
+            // 
+            this.botonAbrir.Name = "botonAbrir";
+            this.botonAbrir.Size = new System.Drawing.Size(187, 26);
+            this.botonAbrir.Text = "Abrir";
+            this.botonAbrir.Click += new System.EventHandler(this.botonAbrir_Click);
+            // 
+            // guardarToolStripMenuItem
+            // 
+            this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(187, 26);
+            this.guardarToolStripMenuItem.Text = "Guardar";
+            this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
+            // 
+            // botonGuardar
+            // 
+            this.botonGuardar.Name = "botonGuardar";
+            this.botonGuardar.Size = new System.Drawing.Size(187, 26);
+            this.botonGuardar.Text = "Guardar como";
+            this.botonGuardar.Click += new System.EventHandler(this.botonGuardar_Click);
             // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-
-            this.splitContainer.Location = new System.Drawing.Point(0, 30);
-            this.splitContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-
+            this.splitContainer.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -139,27 +136,26 @@
             this.splitContainer.Panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.splitContainer.Panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Draw);
             this.splitContainer.Panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
-
-            this.splitContainer.Size = new System.Drawing.Size(950, 596);
-            this.splitContainer.SplitterDistance = 166;
-
+            this.splitContainer.Size = new System.Drawing.Size(949, 598);
+            this.splitContainer.SplitterDistance = 165;
+            this.splitContainer.SplitterWidth = 5;
             this.splitContainer.TabIndex = 3;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(34, 384);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox2.Location = new System.Drawing.Point(45, 473);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(57, 25);
+            this.pictureBox2.Size = new System.Drawing.Size(76, 31);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(26, 451);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.numericUpDown1.Location = new System.Drawing.Point(35, 555);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(77, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(103, 22);
             this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.Value = new decimal(new int[] {
             5,
@@ -170,19 +166,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 436);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(27, 537);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.Size = new System.Drawing.Size(118, 17);
             this.label1.TabIndex = 1;
             this.label1.Text = "Tamaño de línea:";
             // 
             // color
             // 
-            this.color.Location = new System.Drawing.Point(22, 412);
-            this.color.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.color.Location = new System.Drawing.Point(29, 507);
+            this.color.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.color.Name = "color";
-            this.color.Size = new System.Drawing.Size(81, 21);
+            this.color.Size = new System.Drawing.Size(108, 26);
             this.color.TabIndex = 1;
             this.color.Text = "Elegir color";
             this.color.UseVisualStyleBackColor = true;
@@ -198,20 +193,20 @@
             this.botones.Controls.Add(this.flechaRight);
             this.botones.Controls.Add(this.flechaBoth);
             this.botones.Controls.Add(this.flechaNone);
-            this.botones.Location = new System.Drawing.Point(10, 2);
-            this.botones.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.botones.Location = new System.Drawing.Point(13, 2);
+            this.botones.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.botones.Name = "botones";
-            this.botones.Size = new System.Drawing.Size(106, 377);
+            this.botones.Size = new System.Drawing.Size(141, 464);
             this.botones.TabIndex = 1;
             // 
             // rect
             // 
             this.rect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rect.Location = new System.Drawing.Point(2, 2);
-            this.rect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rect.Location = new System.Drawing.Point(3, 2);
+            this.rect.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rect.Name = "rect";
-            this.rect.Size = new System.Drawing.Size(100, 42);
+            this.rect.Size = new System.Drawing.Size(133, 52);
             this.rect.TabIndex = 4;
             this.rect.Text = "Rectángulo";
             this.rect.UseVisualStyleBackColor = true;
@@ -220,10 +215,10 @@
             // 
             this.rectFill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rectFill.Location = new System.Drawing.Point(2, 48);
-            this.rectFill.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rectFill.Location = new System.Drawing.Point(3, 58);
+            this.rectFill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rectFill.Name = "rectFill";
-            this.rectFill.Size = new System.Drawing.Size(100, 42);
+            this.rectFill.Size = new System.Drawing.Size(133, 52);
             this.rectFill.TabIndex = 5;
             this.rectFill.Text = "Rectángulo relleno";
             this.rectFill.UseVisualStyleBackColor = true;
@@ -232,10 +227,10 @@
             // 
             this.circle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.circle.Location = new System.Drawing.Point(2, 94);
-            this.circle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.circle.Location = new System.Drawing.Point(3, 114);
+            this.circle.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.circle.Name = "circle";
-            this.circle.Size = new System.Drawing.Size(100, 42);
+            this.circle.Size = new System.Drawing.Size(133, 52);
             this.circle.TabIndex = 6;
             this.circle.Text = "Elipse";
             this.circle.UseVisualStyleBackColor = true;
@@ -244,10 +239,10 @@
             // 
             this.circFill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.circFill.Location = new System.Drawing.Point(2, 140);
-            this.circFill.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.circFill.Location = new System.Drawing.Point(3, 170);
+            this.circFill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.circFill.Name = "circFill";
-            this.circFill.Size = new System.Drawing.Size(100, 42);
+            this.circFill.Size = new System.Drawing.Size(133, 52);
             this.circFill.TabIndex = 7;
             this.circFill.Text = "Elipse rellena";
             this.circFill.UseVisualStyleBackColor = true;
@@ -256,10 +251,10 @@
             // 
             this.flechaLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flechaLeft.Location = new System.Drawing.Point(2, 186);
-            this.flechaLeft.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flechaLeft.Location = new System.Drawing.Point(3, 226);
+            this.flechaLeft.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flechaLeft.Name = "flechaLeft";
-            this.flechaLeft.Size = new System.Drawing.Size(100, 42);
+            this.flechaLeft.Size = new System.Drawing.Size(133, 52);
             this.flechaLeft.TabIndex = 8;
             this.flechaLeft.Text = "<--";
             this.flechaLeft.UseVisualStyleBackColor = true;
@@ -268,10 +263,10 @@
             // 
             this.flechaRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flechaRight.Location = new System.Drawing.Point(2, 232);
-            this.flechaRight.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flechaRight.Location = new System.Drawing.Point(3, 282);
+            this.flechaRight.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flechaRight.Name = "flechaRight";
-            this.flechaRight.Size = new System.Drawing.Size(100, 42);
+            this.flechaRight.Size = new System.Drawing.Size(133, 52);
             this.flechaRight.TabIndex = 9;
             this.flechaRight.Text = "-->";
             this.flechaRight.UseVisualStyleBackColor = true;
@@ -280,10 +275,10 @@
             // 
             this.flechaBoth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flechaBoth.Location = new System.Drawing.Point(2, 278);
-            this.flechaBoth.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flechaBoth.Location = new System.Drawing.Point(3, 338);
+            this.flechaBoth.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flechaBoth.Name = "flechaBoth";
-            this.flechaBoth.Size = new System.Drawing.Size(100, 42);
+            this.flechaBoth.Size = new System.Drawing.Size(133, 52);
             this.flechaBoth.TabIndex = 10;
             this.flechaBoth.Text = "<->";
             this.flechaBoth.UseVisualStyleBackColor = true;
@@ -292,10 +287,10 @@
             // 
             this.flechaNone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flechaNone.Location = new System.Drawing.Point(2, 324);
-            this.flechaNone.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flechaNone.Location = new System.Drawing.Point(3, 394);
+            this.flechaNone.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.flechaNone.Name = "flechaNone";
-            this.flechaNone.Size = new System.Drawing.Size(100, 42);
+            this.flechaNone.Size = new System.Drawing.Size(133, 52);
             this.flechaNone.TabIndex = 11;
             this.flechaNone.Text = "---";
             this.flechaNone.UseVisualStyleBackColor = true;
@@ -305,12 +300,12 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";
-
-            this.pictureBox1.Size = new System.Drawing.Size(776, 596);
-
+            this.pictureBox1.Size = new System.Drawing.Size(779, 598);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Draw);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
@@ -323,21 +318,14 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // guardarToolStripMenuItem
-            // 
-            this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.guardarToolStripMenuItem.Text = "Guardar";
-            this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(712, 509);
+            this.ClientSize = new System.Drawing.Size(949, 626);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.menuStrip);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Diagramador.NET";
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);

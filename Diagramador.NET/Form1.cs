@@ -6,12 +6,13 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Text.Json;
 using System.IO;
+using System.Linq;
 
 namespace Diagramador.NET
 {
     public partial class Form1 : Form
     {
-        bool check = false, changed = false;
+        bool check = false, changed = false,down = false;
         int accionMouse = -1;
         string archivo = "";
 
@@ -22,7 +23,8 @@ namespace Diagramador.NET
         Bitmap bmp;
         private int opcion = 0;
         Point primerPunto, actualPunto, previous;
-
+        Label aux;
+        RichTextBox r = new RichTextBox();
         public Form1()
         {
             InitializeComponent();
@@ -37,7 +39,104 @@ namespace Diagramador.NET
             openFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave";
             saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave|JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
 
+
+            pictureBox1.Controls.Add(r);
+            r.Visible = false;
+            r.KeyPress += R_KeyPress;
+
             foreach (var b in botones.Controls) (b as Button).Click += ElegirFigura;
+        }
+
+        public void RefreshLabel()
+        {
+            this.Controls.OfType<Control>().Where(ctr => ctr is Label).ToList().ForEach(ctr =>
+            {
+                ctr.MouseDown += Ctr_MouseDown;
+                ctr.MouseUp += Ctr_MouseUp;
+                ctr.MouseMove += Ctr_MouseMove;
+            });
+        }
+        private void Ctr_MouseMove(object sender, MouseEventArgs e)
+        {
+            Control ctr = (Control)sender;
+            if (down)
+            {
+                ctr.Left = e.X + ctr.Left - previous.X;
+                ctr.Top = e.Y + ctr.Top - previous.Y;
+
+            }
+        }
+
+        private void Ctr_MouseUp(object sender, MouseEventArgs e) => down = false;
+
+        private void Ctr_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                down = true;
+                previous = e.Location;
+            }
+        }
+        private void RefrescarTexto()
+        {
+            foreach (Control item in pictureBox1.Controls)
+            {
+                if (item is Label)
+                {
+                    item.DoubleClick += Item_DoubleClick;
+                }
+            }
+        }
+
+
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Label texto = new Label();
+
+            MouseEventArgs a = e as MouseEventArgs;
+
+            Font f = new Font(Font.FontFamily, (int)numericUpDown1.Value);
+
+            texto.Location = new Point(a.Location.X, a.Location.Y);
+            texto.Text = "Escribe aquí";
+            texto.ForeColor = colorDialog1.Color;
+            texto.Font = f;
+
+            texto.AutoSize = true;
+
+            pictureBox1.Controls.Add(texto);
+            RefrescarTexto();
+            texto.MouseDown += Ctr_MouseDown;
+            texto.MouseUp += Ctr_MouseUp;
+            texto.MouseMove += Ctr_MouseMove;
+            RefreshLabel();
+        }
+
+
+
+        private void Item_DoubleClick(object sender, EventArgs e)
+        {
+            aux = sender as Label;
+            r.Location = new Point(aux.Location.X, aux.Location.Y);
+
+            r.Width = aux.Width;
+            r.Height = 20;
+            aux.Visible = false;
+            r.Visible = true;
+        }
+
+        private void R_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((int)e.KeyChar == (int)Keys.Enter)
+            {
+                aux.Visible = true;
+                aux.Text = r.Text;
+                r.Text = "";
+
+                r.Visible = false;
+
+            }
         }
 
         private void ElegirFigura(object sender, EventArgs e)
