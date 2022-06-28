@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Text.Json;
 using System.IO;
+using System.Collections;
 
 namespace Diagramador.NET
 {
@@ -58,7 +59,19 @@ namespace Diagramador.NET
             }
         }
 
-        private void Ctr_MouseUp(object sender, MouseEventArgs e) => accionMouse = -1;
+        private void Ctr_MouseUp(object sender, MouseEventArgs e)
+        {
+            accionMouse = -1;
+            if (e.Button == MouseButtons.Right)
+            {
+                var l = sender as Label;
+                int index = pictureBox1.Controls.IndexOf(l) - 1;
+                save.labels.RemoveAt(index);
+                save.labelsTexto.RemoveAt(index);
+                pictureBox1.Controls.Remove(l);
+                l.Dispose();
+            }
+        }
 
         private void Ctr_MouseDown(object sender, MouseEventArgs e)
         {
@@ -67,19 +80,16 @@ namespace Diagramador.NET
             switch (e.Button)
             {
                 case MouseButtons.Middle:
-                    aux.Font = new Font(Font.FontFamily, (int)numericUpDown1.Value);
+                    int index = pictureBox1.Controls.IndexOf(aux) - 1;
+                    var label = save.labels[index];
                     aux.ForeColor = colorDialog1.Color;
+                    aux.Font = new Font(Font.FontFamily, label[2] = (int)numericUpDown1.Value);
+                    label[3] = colorDialog1.Color.ToArgb();
                     break;
 
                 case MouseButtons.Left:
                     accionMouse = 30;
                     previous = e.Location;
-                    break;
-
-                case MouseButtons.Right:
-                    var l = sender as Label;
-                    pictureBox1.Controls.Remove(l);
-                    l.Dispose();
                     break;
             }
         }
@@ -114,18 +124,22 @@ namespace Diagramador.NET
 
         private void R_KeyPress(object sender, KeyEventArgs e)
         {
-            if(!editText) editText = e.KeyValue == (int)Keys.ControlKey;
+            editText = e.KeyValue == (int)Keys.ControlKey;
 
             if (e.KeyValue == (int)Keys.Enter)
             {
-                if(editText)
+                int index = pictureBox1.Controls.IndexOf(aux) - 1;
+                
+                if (editText)
                 {
+                    var label = save.labels[index];
                     aux.ForeColor = colorDialog1.Color;
-                    aux.Font = new Font(Font.FontFamily, (int)numericUpDown1.Value);
+                    aux.Font = new Font(Font.FontFamily, label[2] = (int)numericUpDown1.Value);
+                    label[3] = colorDialog1.Color.ToArgb();
                     editText = false;
                 }
                 aux.Visible = true;
-                aux.Text = r.Text;
+                save.labelsTexto[index] = aux.Text = r.Text;
                 r.Visible = false;
                 return;
             }
@@ -187,6 +201,26 @@ namespace Diagramador.NET
             }
         }
 
+        private int[] CrearLabel(Point e, string txt, int size, int color)
+        {
+            Label texto = new Label();
+
+            texto.Location = new Point(e.X, e.Y);
+            texto.Text = txt;
+            texto.ForeColor = Color.FromArgb(color);
+            texto.Font = new Font(Font.FontFamily, size);
+            texto.AutoSize = true;
+
+            pictureBox1.Controls.Add(texto);
+            
+            RefrescarTexto();
+            texto.MouseDown += Ctr_MouseDown;
+            texto.MouseUp += Ctr_MouseUp;
+            texto.MouseMove += Ctr_MouseMove;
+
+            return new int[] { e.X, e.Y, size, color };
+        }
+
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             check = false;
@@ -194,21 +228,8 @@ namespace Diagramador.NET
             {
                 if (opcion == 4)
                 {
-                    Label texto = new Label();
-
-                    texto.Location = new Point(e.X, e.Y);
-                    texto.Text = "Escribe aquí";
-                    texto.ForeColor = colorDialog1.Color;
-                    texto.Font = new Font(Font.FontFamily, (int)numericUpDown1.Value);
-
-                    texto.AutoSize = true;
-
-                    pictureBox1.Controls.Add(texto);
-                    RefrescarTexto();
-                    texto.MouseDown += Ctr_MouseDown;
-                    texto.MouseUp += Ctr_MouseUp;
-                    texto.MouseMove += Ctr_MouseMove;
-                    
+                    save.labels.Add(CrearLabel(e.Location, "Escribir aquí...", (int)numericUpDown1.Value, colorDialog1.Color.ToArgb()));
+                    save.labelsTexto.Add("Escribir aquí...");
                     return;
                 }
 
@@ -827,8 +848,6 @@ namespace Diagramador.NET
         }
 
 
-        
-        
 
         private void RedrawFiguras()
         {
@@ -941,14 +960,33 @@ namespace Diagramador.NET
                 archivo = openFileDialog1.FileName;
                 this.save = save;
                 RedrawFiguras();
-                changed = false;
+                pictureBox1.Controls.Clear();
+                pictureBox1.Controls.Add(r);
 
+                foreach(var l in save.labels)
+                    CrearLabel(new Point(l[0],l[1]),save.labelsTexto[save.labels.IndexOf(l)], l[2], l[3]);
+                
+                changed = false;
             }
         }
 
         private void ExportarImagen()
         {
-            pictureBox1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+            var bmp = new Bitmap(this.bmp);
+            using(Graphics g = Graphics.FromImage(this.bmp))
+            {
+                foreach(var c in pictureBox1.Controls)
+                {
+                    if(c is Label)
+                    {
+                        var l = c as Label;
+                        
+                        g.DrawString(l.Text, l.Font, new SolidBrush(l.ForeColor), l.Location);
+                    }
+                }
+                pictureBox1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            this.bmp = bmp;
         }
 
         private void botonGuardar_Click(object sender, EventArgs e)
@@ -1008,10 +1046,8 @@ namespace Diagramador.NET
             else return true;
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
+        protected override void OnClosing(CancelEventArgs e) =>
             CheckChange(this, e);
-            base.OnClosing(e);
-        }
+        
     }
 }
