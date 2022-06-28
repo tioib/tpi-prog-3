@@ -852,7 +852,6 @@ namespace Diagramador.NET
                             break;
                     }
 
-                    g.Dispose();
                     pen.Dispose();
                     brush.Dispose();
                 }
