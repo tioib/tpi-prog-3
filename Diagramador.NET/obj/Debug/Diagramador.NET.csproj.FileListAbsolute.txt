@@ -55,3 +55,4 @@ C:\Users\Luciano\Desktop\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.cs
 C:\Users\Luciano\Desktop\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.CopyComplete
 C:\Users\Luciano\Desktop\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.exe
 C:\Users\Luciano\Desktop\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.pdb
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.AssemblyReference.cache

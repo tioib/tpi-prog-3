@@ -37,7 +37,7 @@ namespace Diagramador.NET
             saveFileDialog1.FileOk += Guardar;
             openFileDialog1.FileOk += Abrir;
             openFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave";
-            saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave|JPG (.*jpg *jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
+            saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave|PNG (*.png)|*.png";
 
 
             pictureBox1.Controls.Add(r);
@@ -896,15 +896,7 @@ namespace Diagramador.NET
 
         private void ExportarImagen()
         {
-            using(FileStream fs = File.Open(saveFileDialog1.FileName, FileMode.OpenOrCreate))
-            if (saveFileDialog1.FilterIndex == 2)
-            {
-                pictureBox1.Image = null;
-                pictureBox1.Image = bmp;
-                pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
-            }
-            else
-                pictureBox1.Image.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+            pictureBox1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
         }
 
         private void botonGuardar_Click(object sender, EventArgs e)
