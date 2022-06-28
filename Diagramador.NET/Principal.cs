@@ -6,13 +6,12 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Text.Json;
 using System.IO;
-using System.Linq;
 
 namespace Diagramador.NET
 {
-    public partial class Form1 : Form
+    public partial class Principal : Form
     {
-        bool check = false, changed = false,down = false;
+        bool check = false, changed = false, editText = false;
         int accionMouse = -1;
         string archivo = "";
 
@@ -21,11 +20,12 @@ namespace Diagramador.NET
         int[] figura;
      
         Bitmap bmp;
-        private int opcion = 0;
+        private int opcion = -1;
         Point primerPunto, actualPunto, previous;
-        Label aux;
+        Label aux = new Label();
         RichTextBox r = new RichTextBox();
-        public Form1()
+
+        public Principal()
         {
             InitializeComponent();
             SplitterPanel panel2 = splitContainer.Panel2;
@@ -39,44 +39,63 @@ namespace Diagramador.NET
             openFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave";
             saveFileDialog1.Filter = "dnsave files (*.dnsave)|*.dnsave|PNG (*.png)|*.png";
 
-
             pictureBox1.Controls.Add(r);
             r.Visible = false;
-            r.KeyPress += R_KeyPress;
+            r.KeyDown += R_KeyPress;
+            r.KeyUp += DontEditText;
 
             foreach (var b in botones.Controls) (b as Button).Click += ElegirFigura;
         }
 
-        public void RefreshLabel()
-        {
-            this.Controls.OfType<Control>().Where(ctr => ctr is Label).ToList().ForEach(ctr =>
-            {
-                ctr.MouseDown += Ctr_MouseDown;
-                ctr.MouseUp += Ctr_MouseUp;
-                ctr.MouseMove += Ctr_MouseMove;
-            });
-        }
+
         private void Ctr_MouseMove(object sender, MouseEventArgs e)
         {
             Control ctr = (Control)sender;
-            if (down)
+            if (accionMouse == 30)
             {
                 ctr.Left = e.X + ctr.Left - previous.X;
                 ctr.Top = e.Y + ctr.Top - previous.Y;
-
             }
         }
 
-        private void Ctr_MouseUp(object sender, MouseEventArgs e) => down = false;
+        private void Ctr_MouseUp(object sender, MouseEventArgs e) => accionMouse = -1;
 
         private void Ctr_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (!aux.Visible) aux.Visible = true;
+            aux = sender as Label;
+            switch (e.Button)
             {
-                down = true;
-                previous = e.Location;
+                case MouseButtons.Middle:
+                    aux.Font = new Font(Font.FontFamily, (int)numericUpDown1.Value);
+                    aux.ForeColor = colorDialog1.Color;
+                    break;
+
+                case MouseButtons.Left:
+                    accionMouse = 30;
+                    previous = e.Location;
+                    break;
+
+                case MouseButtons.Right:
+                    var l = sender as Label;
+                    pictureBox1.Controls.Remove(l);
+                    l.Dispose();
+                    break;
             }
         }
+
+        private void Item_DoubleClick(object sender, EventArgs e)
+        {
+            r.Location = new Point(aux.Location.X, aux.Location.Y);
+            r.Text = aux.Text;
+            r.Width = aux.Width;
+            r.Height = 20;
+            aux.Visible = false;
+            r.Visible = true;
+
+            r.Focus();
+        }
+
         private void RefrescarTexto()
         {
             foreach (Control item in pictureBox1.Controls)
@@ -88,54 +107,35 @@ namespace Diagramador.NET
             }
         }
 
-
-
-        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        private void DontEditText(object sender, KeyEventArgs e)
         {
-            Label texto = new Label();
-
-            MouseEventArgs a = e as MouseEventArgs;
-
-            Font f = new Font(Font.FontFamily, (int)numericUpDown1.Value);
-
-            texto.Location = new Point(a.Location.X, a.Location.Y);
-            texto.Text = "Escribe aquí";
-            texto.ForeColor = colorDialog1.Color;
-            texto.Font = f;
-
-            texto.AutoSize = true;
-
-            pictureBox1.Controls.Add(texto);
-            RefrescarTexto();
-            texto.MouseDown += Ctr_MouseDown;
-            texto.MouseUp += Ctr_MouseUp;
-            texto.MouseMove += Ctr_MouseMove;
-            RefreshLabel();
+            if(e.KeyValue == (int)Keys.ControlKey) editText = false;
         }
 
-
-
-        private void Item_DoubleClick(object sender, EventArgs e)
+        private void R_KeyPress(object sender, KeyEventArgs e)
         {
-            aux = sender as Label;
-            r.Location = new Point(aux.Location.X, aux.Location.Y);
+            if(!editText) editText = e.KeyValue == (int)Keys.ControlKey;
 
-            r.Width = aux.Width;
-            r.Height = 20;
-            aux.Visible = false;
-            r.Visible = true;
-        }
-
-        private void R_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if ((int)e.KeyChar == (int)Keys.Enter)
+            if (e.KeyValue == (int)Keys.Enter)
             {
+                if(editText)
+                {
+                    aux.ForeColor = colorDialog1.Color;
+                    aux.Font = new Font(Font.FontFamily, (int)numericUpDown1.Value);
+                    editText = false;
+                }
                 aux.Visible = true;
                 aux.Text = r.Text;
-                r.Text = "";
-
                 r.Visible = false;
+                return;
+            }
 
+            if (e.KeyValue == (int)Keys.Escape)
+            {
+                aux.Visible = true;
+                r.Text = "";
+                r.Visible = false;
+                return;
             }
         }
 
@@ -147,7 +147,7 @@ namespace Diagramador.NET
                 case "Rectángulo relleno": opcion = 1; break;
                 case "Elipse": opcion = 2; break;
                 case "Elipse rellena": opcion = 3; break;
-                case "<--": opcion = 4; break;
+                case "Texto": opcion = 4; break;
                 case "-->": opcion = 5; break;
                 case "<->": opcion = 6; break;
                 case "---": opcion = 7; break;
@@ -160,12 +160,59 @@ namespace Diagramador.NET
             pictureBox2.BackColor = colorDialog1.Color;
         }
 
+        private void Change(object sender, MouseEventArgs e)
+        {
+            foreach(var r in save.figuras)
+            {
+                if(InsideFigura(r,e.Location))
+                {
+                    figura = new int[] {
+                                r[0], //X
+                                r[1], //Y
+                                r[2], //width
+                                r[3], //height
+                                r[4], //grosor de linea de la figura (PenWidth)
+                                r[5], //tipo de figura (rectangulo, elipse, etc)
+                                save.figuras.IndexOf(r) //indice de la figura en la lista (para el color)
+                            };
+
+                    primerPunto = new Point(r[0], r[1]);
+                    actualPunto = r[5] < 4 ? new Point(r[0] + r[2], r[1] + r[3]) : new Point(r[2], r[3]);
+
+                    DibujarFigura(figura[5], colorDialog1.Color);
+                    BorrarFigura();
+                    pictureBox1.Cursor = Cursors.Default;
+                    return;
+                }
+            }
+        }
+
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             check = false;
-            if (e.Button == MouseButtons.Left)
+            if (opcion != -1 && e.Button == MouseButtons.Left)
             {
-                if(accionMouse > 1)
+                if (opcion == 4)
+                {
+                    Label texto = new Label();
+
+                    texto.Location = new Point(e.X, e.Y);
+                    texto.Text = "Escribe aquí";
+                    texto.ForeColor = colorDialog1.Color;
+                    texto.Font = new Font(Font.FontFamily, (int)numericUpDown1.Value);
+
+                    texto.AutoSize = true;
+
+                    pictureBox1.Controls.Add(texto);
+                    RefrescarTexto();
+                    texto.MouseDown += Ctr_MouseDown;
+                    texto.MouseUp += Ctr_MouseUp;
+                    texto.MouseMove += Ctr_MouseMove;
+                    
+                    return;
+                }
+
+                if (accionMouse > 1)
                 {
                     primerPunto = new Point(figura[0], figura[1]);
                     if(accionMouse > 9)
@@ -175,7 +222,6 @@ namespace Diagramador.NET
                     }
                     else actualPunto = new Point(figura[0] + figura[2], figura[1] + figura[3]);
                     accionMouse += 10;
-                    Debug.WriteLine(accionMouse);
                     return;
                 }
 
@@ -488,9 +534,9 @@ namespace Diagramador.NET
             pen.DashStyle = DashStyle.DashDotDot;
             switch (linea)
             {
-                case 4:
-                    pen.StartCap = LineCap.ArrowAnchor;
-                    break;
+                //case 4:
+                //    pen.StartCap = LineCap.ArrowAnchor;
+                //    break;
                 case 5:
                     pen.EndCap = LineCap.ArrowAnchor;
                     break;
@@ -541,13 +587,14 @@ namespace Diagramador.NET
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left)
+            switch(e.Button)
             {
-                foreach(var r in save.figuras)
-                {
-                    if (InsideFigura(r, e.Location))
+                case MouseButtons.Right:
+                    foreach (var r in save.figuras)
                     {
-                        figura = new int[] {
+                        if (InsideFigura(r, e.Location))
+                        {
+                            figura = new int[] {
                             r[0], //X
                             r[1], //Y
                             r[2], //width
@@ -556,27 +603,34 @@ namespace Diagramador.NET
                             r[5], //tipo de figura (rectangulo, elipse, etc)
                             save.figuras.IndexOf(r) //indice de la figura en la lista (para el color)
                         };
-                        BorrarFigura();
-                        changed = true;
-                        return;
+                            BorrarFigura();
+                            changed = true;
+                            return;
+                        }
                     }
-                }
-            }
+                    break;
 
-            if(check)
-            {
-                if (accionMouse == 0)
-                {
-                    DibujarFigura(opcion, colorDialog1.Color);
-                    pictureBox1.Refresh();
-                }
-                else if(accionMouse != -1)
-                {
-                    DibujarFigura(figura[5], Color.FromArgb(save.colores[figura[6]]));
-                    BorrarFigura();
-                    pictureBox1.Cursor = Cursors.Default;
-                }
-                changed = true;
+                case MouseButtons.Left:
+                    if (check)
+                    {
+                        if (accionMouse == 0)
+                        {
+                            DibujarFigura(opcion, colorDialog1.Color);
+                            pictureBox1.Refresh();
+                        }
+                        else if (accionMouse != -1)
+                        {
+                            DibujarFigura(figura[5], Color.FromArgb(save.colores[figura[6]]));
+                            BorrarFigura();
+                            pictureBox1.Cursor = Cursors.Default;
+                        }
+                        changed = true;
+                    }
+                    break;
+
+                case MouseButtons.Middle:
+                    Change(sender, e);
+                    break;
             }
             accionMouse = -1;
         }
@@ -637,9 +691,9 @@ namespace Diagramador.NET
                         pen.Width = figura[4];
                         switch (figura[5])
                         {
-                            case 4:
-                                pen.StartCap = LineCap.ArrowAnchor;
-                                break;
+                            //case 4:
+                            //    pen.StartCap = LineCap.ArrowAnchor;
+                            //    break;
                             case 5:
                                 pen.EndCap = LineCap.ArrowAnchor;
                                 break;
@@ -733,9 +787,9 @@ namespace Diagramador.NET
                     default:
                         switch (opcion)
                         {
-                            case 4:
-                                pen.StartCap = LineCap.ArrowAnchor;
-                                break;
+                            //case 4:
+                            //    pen.StartCap = LineCap.ArrowAnchor;
+                            //    break;
                             case 5:
                                 pen.EndCap = LineCap.ArrowAnchor;
                                 break;
@@ -834,9 +888,9 @@ namespace Diagramador.NET
                             pen.Width = r[4];
                             switch (r[5])
                             {
-                                case 4:
-                                    pen.StartCap = LineCap.ArrowAnchor;
-                                    break;
+                                //case 4:
+                                //    pen.StartCap = LineCap.ArrowAnchor;
+                                //    break;
                                 case 5:
                                     pen.EndCap = LineCap.ArrowAnchor;
                                     break;
@@ -882,7 +936,6 @@ namespace Diagramador.NET
             var save = JsonSerializer.Deserialize<Save>(File.ReadAllText(openFileDialog1.FileName));
             if (save != null)
             {
-                Debug.WriteLine("");
                 bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
                 pictureBox1.Image = bmp;
                 archivo = openFileDialog1.FileName;
@@ -905,7 +958,6 @@ namespace Diagramador.NET
 
         private void Guardar(object sender, EventArgs e)
         {
-            Debug.WriteLine(saveFileDialog1.FilterIndex);
             if (saveFileDialog1.FilterIndex > 1) ExportarImagen();
             else
             {

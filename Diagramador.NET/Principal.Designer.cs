@@ -1,6 +1,6 @@
 ﻿namespace Diagramador.NET
 {
-    partial class Form1
+    partial class Principal
     {
         /// <summary>
         /// Variable del diseñador necesaria.
@@ -158,7 +158,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(103, 22);
             this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.Value = new decimal(new int[] {
-            5,
+            8,
             0,
             0,
             0});
@@ -256,7 +256,7 @@
             this.flechaLeft.Name = "flechaLeft";
             this.flechaLeft.Size = new System.Drawing.Size(133, 52);
             this.flechaLeft.TabIndex = 8;
-            this.flechaLeft.Text = "<--";
+            this.flechaLeft.Text = "Texto";
             this.flechaLeft.UseVisualStyleBackColor = true;
             // 
             // flechaRight
@@ -300,12 +300,12 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(779, 598);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
+            this.pictureBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Change);
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Draw);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
@@ -318,7 +318,7 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Form1
+            // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -326,7 +326,7 @@
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.menuStrip);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Name = "Form1";
+            this.Name = "Principal";
             this.Text = "Diagramador.NET";
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.menuStrip.ResumeLayout(false);
