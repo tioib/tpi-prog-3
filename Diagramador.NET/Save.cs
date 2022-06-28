@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Windows.Forms;
 
 namespace Diagramador.NET
 {
@@ -21,6 +19,8 @@ namespace Diagramador.NET
         {
             figuras.Clear();
             colores.Clear();
+            labels.Clear();
+            labelsTexto.Clear();
         }
     }
 }

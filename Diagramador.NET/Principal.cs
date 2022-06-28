@@ -2,11 +2,9 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Text.Json;
 using System.IO;
-using System.Collections;
 
 namespace Diagramador.NET
 {
@@ -124,7 +122,7 @@ namespace Diagramador.NET
 
         private void R_KeyPress(object sender, KeyEventArgs e)
         {
-            editText = e.KeyValue == (int)Keys.ControlKey;
+            if(!editText)editText = e.KeyValue == (int)Keys.ControlKey;
 
             if (e.KeyValue == (int)Keys.Enter)
             {
@@ -230,6 +228,7 @@ namespace Diagramador.NET
                 {
                     save.labels.Add(CrearLabel(e.Location, "Escribir aquí...", (int)numericUpDown1.Value, colorDialog1.Color.ToArgb()));
                     save.labelsTexto.Add("Escribir aquí...");
+                    changed = true;
                     return;
                 }
 
@@ -1021,6 +1020,8 @@ namespace Diagramador.NET
             if(CheckChange(sender,e))
             {
                 save.Clear();
+                pictureBox1.Controls.Clear();
+                pictureBox1.Controls.Add(r);
                 bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
                 pictureBox1.Image = bmp;
                 changed = false;
@@ -1029,6 +1030,8 @@ namespace Diagramador.NET
 
         private bool CheckChange(object sender, EventArgs e)
         {
+            if(changed && save.figuras.Count == 0 && save.labels.Count == 0) changed = false;
+            
             if (changed)
             {
                 switch (MessageBox.Show("Cambios realizados, ¿desea guardar el diagrama?", "Alerta", MessageBoxButtons.YesNoCancel))
