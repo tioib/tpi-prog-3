@@ -52,3 +52,10 @@ C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagram
 C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.exe
 C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.pdb
 >>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.AssemblyReference.cache
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Form1.resources
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Properties.Resources.resources
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.GenerateResource.cache
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.CoreCompileInputs.cache
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.exe
+C:\Users\lucia\source\repos\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.pdb

@@ -71,13 +71,10 @@
             this.archivoToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-<<<<<<< HEAD
+
             this.menuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
             this.menuStrip.Size = new System.Drawing.Size(950, 30);
-=======
-            this.menuStrip.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(712, 24);
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip2";
             // 
@@ -94,55 +91,38 @@
             // 
             // botonAbrir
             // 
-<<<<<<< HEAD
+
             this.botonAbrir.Name = "botonAbrir";
             this.botonAbrir.Size = new System.Drawing.Size(224, 26);
             this.botonAbrir.Text = "Abrir";
             this.botonAbrir.Click += new System.EventHandler(this.botonAbrir_Click);
-=======
-            this.nuevoToolStripMenuItem.Name = "nuevoToolStripMenuItem";
-            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.nuevoToolStripMenuItem.Text = "Abrir";
-            this.nuevoToolStripMenuItem.Click += new System.EventHandler(this.nuevoToolStripMenuItem_Click);
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             // 
             // botonGuardar
             // 
-<<<<<<< HEAD
+
             this.botonGuardar.Name = "botonGuardar";
             this.botonGuardar.Size = new System.Drawing.Size(224, 26);
             this.botonGuardar.Text = "Guardar como";
             this.botonGuardar.Click += new System.EventHandler(this.botonGuardar_Click);
-=======
-            this.cargarToolStripMenuItem.Name = "cargarToolStripMenuItem";
-            this.cargarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.cargarToolStripMenuItem.Text = "Guardar";
-            this.cargarToolStripMenuItem.Click += new System.EventHandler(this.cargarToolStripMenuItem_Click);
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             // 
             // botonNuevo
             // 
-<<<<<<< HEAD
+
             this.botonNuevo.Name = "botonNuevo";
             this.botonNuevo.Size = new System.Drawing.Size(224, 26);
             this.botonNuevo.Text = "Nuevo";
             this.botonNuevo.Click += new System.EventHandler(this.botonNuevo_Click);
-=======
-            this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.guardarToolStripMenuItem.Text = "Nuevo";
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-<<<<<<< HEAD
+
             this.splitContainer.Location = new System.Drawing.Point(0, 30);
             this.splitContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-=======
-            this.splitContainer.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -159,14 +139,10 @@
             this.splitContainer.Panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.splitContainer.Panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Draw);
             this.splitContainer.Panel2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
-<<<<<<< HEAD
+
             this.splitContainer.Size = new System.Drawing.Size(950, 596);
             this.splitContainer.SplitterDistance = 166;
-=======
-            this.splitContainer.Size = new System.Drawing.Size(712, 485);
-            this.splitContainer.SplitterDistance = 124;
-            this.splitContainer.SplitterWidth = 3;
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             this.splitContainer.TabIndex = 3;
             // 
             // pictureBox2
@@ -330,11 +306,9 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-<<<<<<< HEAD
+
             this.pictureBox1.Size = new System.Drawing.Size(776, 596);
-=======
-            this.pictureBox1.Size = new System.Drawing.Size(582, 485);
->>>>>>> 9ab394dc3d74c1e46b97654e728f6f6c5f54246c
+
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
