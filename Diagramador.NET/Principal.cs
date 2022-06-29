@@ -60,14 +60,22 @@ namespace Diagramador.NET
         private void Ctr_MouseUp(object sender, MouseEventArgs e)
         {
             accionMouse = -1;
-            if (e.Button == MouseButtons.Right)
+            var l = sender as Label;
+            int index = pictureBox1.Controls.IndexOf(l) - 1;
+            switch (e.Button)
             {
-                var l = sender as Label;
-                int index = pictureBox1.Controls.IndexOf(l) - 1;
-                save.labels.RemoveAt(index);
-                save.labelsTexto.RemoveAt(index);
-                pictureBox1.Controls.Remove(l);
-                l.Dispose();
+                case MouseButtons.Right:
+                    save.labels.RemoveAt(index);
+                    save.labelsTexto.RemoveAt(index);
+                    pictureBox1.Controls.Remove(l);
+                    l.Dispose();
+                    break;
+
+                case MouseButtons.Left:
+                    var label = save.labels[index];
+                    label[0] = aux.Location.X;
+                    label[1] = aux.Location.Y;
+                    break;
             }
         }
 
