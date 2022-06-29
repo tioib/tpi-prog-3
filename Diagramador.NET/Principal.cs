@@ -59,7 +59,7 @@ namespace Diagramador.NET
 
         private void Ctr_MouseUp(object sender, MouseEventArgs e)
         {
-            accionMouse = -1;
+            accionMouse = -1;//para nada
             var l = sender as Label;
             int index = pictureBox1.Controls.IndexOf(l) - 1;
             switch (e.Button)
@@ -73,12 +73,30 @@ namespace Diagramador.NET
 
                 case MouseButtons.Left:
                     var label = save.labels[index];
-                    label[0] = aux.Location.X;
-                    label[1] = aux.Location.Y;
+                    label[0] = l.Location.X;
+                    label[1] = l.Location.Y;
                     break;
             }
         }
+        private int[] CrearLabel(Point e, string txt, int size, int color)
+        {
+            Label texto = new Label();
 
+            texto.Location = new Point(e.X, e.Y);
+            texto.Text = txt;
+            texto.ForeColor = Color.FromArgb(color);
+            texto.Font = new Font(Font.FontFamily, size);
+            texto.AutoSize = true;
+
+            pictureBox1.Controls.Add(texto);
+
+            texto.DoubleClick += Item_DoubleClick;
+            texto.MouseDown += Ctr_MouseDown;
+            texto.MouseUp += Ctr_MouseUp;
+            texto.MouseMove += Ctr_MouseMove;
+
+            return new int[] { e.X, e.Y, size, color };
+        }
         private void Ctr_MouseDown(object sender, MouseEventArgs e)
         {
             if (!aux.Visible) aux.Visible = true;
@@ -94,8 +112,8 @@ namespace Diagramador.NET
                     break;
 
                 case MouseButtons.Left:
-                    accionMouse = 30;
-                    previous = e.Location;
+                    accionMouse = 30;//para mover el label
+                    previous = e.Location;//primer posicion del mouse cuando haces click
                     break;
             }
         }
@@ -109,19 +127,10 @@ namespace Diagramador.NET
             aux.Visible = false;
             r.Visible = true;
 
-            r.Focus();
+            r.Focus();//automaticamente se pone para escribir en el richtextbox
         }
 
-        private void RefrescarTexto()
-        {
-            foreach (Control item in pictureBox1.Controls)
-            {
-                if (item is Label)
-                {
-                    item.DoubleClick += Item_DoubleClick;
-                }
-            }
-        }
+
 
         private void DontEditText(object sender, KeyEventArgs e)
         {
@@ -153,7 +162,7 @@ namespace Diagramador.NET
             if (e.KeyValue == (int)Keys.Escape)
             {
                 aux.Visible = true;
-                r.Text = "";
+                //r.Text = "";
                 r.Visible = false;
                 return;
             }
@@ -196,7 +205,7 @@ namespace Diagramador.NET
                                 save.figuras.IndexOf(r) //indice de la figura en la lista (para el color)
                             };
 
-                    primerPunto = new Point(r[0], r[1]);
+                    primerPunto = new Point(r[0], r[1]);//Izquierda - arriba
                     actualPunto = r[5] < 4 ? new Point(r[0] + r[2], r[1] + r[3]) : new Point(r[2], r[3]);
 
                     DibujarFigura(figura[5], colorDialog1.Color);
@@ -207,25 +216,7 @@ namespace Diagramador.NET
             }
         }
 
-        private int[] CrearLabel(Point e, string txt, int size, int color)
-        {
-            Label texto = new Label();
 
-            texto.Location = new Point(e.X, e.Y);
-            texto.Text = txt;
-            texto.ForeColor = Color.FromArgb(color);
-            texto.Font = new Font(Font.FontFamily, size);
-            texto.AutoSize = true;
-
-            pictureBox1.Controls.Add(texto);
-            
-            RefrescarTexto();
-            texto.MouseDown += Ctr_MouseDown;
-            texto.MouseUp += Ctr_MouseUp;
-            texto.MouseMove += Ctr_MouseMove;
-
-            return new int[] { e.X, e.Y, size, color };
-        }
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -815,9 +806,6 @@ namespace Diagramador.NET
                     default:
                         switch (opcion)
                         {
-                            //case 4:
-                            //    pen.StartCap = LineCap.ArrowAnchor;
-                            //    break;
                             case 5:
                                 pen.EndCap = LineCap.ArrowAnchor;
                                 break;
@@ -846,7 +834,7 @@ namespace Diagramador.NET
 
             using(var path = new GraphicsPath())
             {
-                using(var pen = new Pen(Color.Transparent, r[5]))
+                using(var pen = new Pen(Color.Transparent, r[4]))
                 {
                     path.AddLine(new Point(r[0],r[1]),new Point(r[2],r[3]));
                     return path.IsOutlineVisible(e, pen);
@@ -956,7 +944,26 @@ namespace Diagramador.NET
         {
             if(CheckChange(sender, e)) openFileDialog1.ShowDialog();
         }
+        private bool CheckChange(object sender, EventArgs e)
+        {
+            if (changed && save.figuras.Count == 0 && save.labels.Count == 0) changed = false;
 
+            if (changed)
+            {
+                switch (MessageBox.Show("Cambios realizados, ¿desea guardar el diagrama?", "Alerta", MessageBoxButtons.YesNoCancel))
+                {
+                    case DialogResult.Yes:
+                        botonGuardar_Click(sender, e);
+                        break;
+
+                    case DialogResult.Cancel:
+                        return false;
+
+                }
+                return true;
+            }
+            else return true;
+        }
         private void Abrir(object sebder, EventArgs e)
         {
             var save = JsonSerializer.Deserialize<Save>(File.ReadAllText(openFileDialog1.FileName));
@@ -1036,26 +1043,7 @@ namespace Diagramador.NET
             }
         }
 
-        private bool CheckChange(object sender, EventArgs e)
-        {
-            if(changed && save.figuras.Count == 0 && save.labels.Count == 0) changed = false;
-            
-            if (changed)
-            {
-                switch (MessageBox.Show("Cambios realizados, ¿desea guardar el diagrama?", "Alerta", MessageBoxButtons.YesNoCancel))
-                {
-                    case DialogResult.Yes:
-                        botonGuardar_Click(sender, e);
-                        break;
 
-                    case DialogResult.Cancel:
-                        return false;
-
-                }
-                return true;
-            }
-            else return true;
-        }
 
         protected override void OnClosing(CancelEventArgs e) =>
             CheckChange(this, e);
