@@ -69,12 +69,14 @@ namespace Diagramador.NET
                     save.labelsTexto.RemoveAt(index);
                     pictureBox1.Controls.Remove(l);
                     l.Dispose();
+                    changed = true;
                     break;
 
                 case MouseButtons.Left:
                     var label = save.labels[index];
                     label[0] = l.Location.X;
                     label[1] = l.Location.Y;
+                    changed = true;
                     break;
             }
         }
@@ -109,6 +111,7 @@ namespace Diagramador.NET
                     aux.ForeColor = colorDialog1.Color;
                     aux.Font = new Font(Font.FontFamily, label[2] = (int)numericUpDown1.Value);
                     label[3] = colorDialog1.Color.ToArgb();
+                    changed = true;
                     break;
 
                 case MouseButtons.Left:
@@ -189,7 +192,7 @@ namespace Diagramador.NET
             pictureBox2.BackColor = colorDialog1.Color;
         }
 
-        private void Change(object sender, MouseEventArgs e)
+        private void ChangeColor(object sender, MouseEventArgs e)
         {
             foreach(var r in save.figuras)
             {
@@ -211,6 +214,7 @@ namespace Diagramador.NET
                     DibujarFigura(figura[5], colorDialog1.Color);
                     BorrarFigura();
                     pictureBox1.Cursor = Cursors.Default;
+                    changed = true;
                     return;
                 }
             }
@@ -553,9 +557,6 @@ namespace Diagramador.NET
             pen.DashStyle = DashStyle.DashDotDot;
             switch (linea)
             {
-                //case 4:
-                //    pen.StartCap = LineCap.ArrowAnchor;
-                //    break;
                 case 5:
                     pen.EndCap = LineCap.ArrowAnchor;
                     break;
@@ -902,9 +903,6 @@ namespace Diagramador.NET
                             pen.Width = r[4];
                             switch (r[5])
                             {
-                                //case 4:
-                                //    pen.StartCap = LineCap.ArrowAnchor;
-                                //    break;
                                 case 5:
                                     pen.EndCap = LineCap.ArrowAnchor;
                                     break;
