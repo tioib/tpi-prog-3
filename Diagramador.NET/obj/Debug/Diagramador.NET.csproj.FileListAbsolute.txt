@@ -85,3 +85,4 @@ C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramado
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.pdb
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.Principal.resources
 C:\Users\Luciano\Desktop\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Principal.resources
+C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.Ayuda.resources

@@ -43,6 +43,8 @@ namespace Diagramador.NET
             r.KeyDown += R_KeyPress;
             r.KeyUp += DontEditText;
 
+            HelpButtonClicked += ayudaToolStripMenuItem_Click;
+
             foreach (var b in botones.Controls) (b as Button).Click += ElegirFigura;
         }
 
@@ -1004,6 +1006,13 @@ namespace Diagramador.NET
         private void botonGuardar_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();
+        }
+
+        private void ayudaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var a = new Ayuda();
+            a.ShowDialog();
+            a.Dispose();
         }
 
         private void Guardar(object sender, EventArgs e)

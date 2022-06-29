@@ -53,6 +53,7 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -68,7 +69,8 @@
             // 
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.archivoToolStripMenuItem});
+            this.archivoToolStripMenuItem,
+            this.ayudaToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
@@ -90,28 +92,28 @@
             // botonNuevo
             // 
             this.botonNuevo.Name = "botonNuevo";
-            this.botonNuevo.Size = new System.Drawing.Size(187, 26);
+            this.botonNuevo.Size = new System.Drawing.Size(224, 26);
             this.botonNuevo.Text = "Nuevo";
             this.botonNuevo.Click += new System.EventHandler(this.botonNuevo_Click);
             // 
             // botonAbrir
             // 
             this.botonAbrir.Name = "botonAbrir";
-            this.botonAbrir.Size = new System.Drawing.Size(187, 26);
+            this.botonAbrir.Size = new System.Drawing.Size(224, 26);
             this.botonAbrir.Text = "Abrir";
             this.botonAbrir.Click += new System.EventHandler(this.botonAbrir_Click);
             // 
             // guardarToolStripMenuItem
             // 
             this.guardarToolStripMenuItem.Name = "guardarToolStripMenuItem";
-            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(187, 26);
+            this.guardarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.guardarToolStripMenuItem.Text = "Guardar";
             this.guardarToolStripMenuItem.Click += new System.EventHandler(this.guardarToolStripMenuItem_Click);
             // 
             // botonGuardar
             // 
             this.botonGuardar.Name = "botonGuardar";
-            this.botonGuardar.Size = new System.Drawing.Size(187, 26);
+            this.botonGuardar.Size = new System.Drawing.Size(224, 26);
             this.botonGuardar.Text = "Guardar como";
             this.botonGuardar.Click += new System.EventHandler(this.botonGuardar_Click);
             // 
@@ -318,6 +320,13 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // ayudaToolStripMenuItem
+            // 
+            this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
+            this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
+            this.ayudaToolStripMenuItem.Text = "Ayuda";
+            this.ayudaToolStripMenuItem.Click += new System.EventHandler(this.ayudaToolStripMenuItem_Click);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -325,6 +334,7 @@
             this.ClientSize = new System.Drawing.Size(949, 626);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.menuStrip);
+            this.HelpButton = true;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Principal";
             this.Text = "Diagramador.NET";
@@ -372,6 +382,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem guardarToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ToolStripMenuItem ayudaToolStripMenuItem;
     }
 }
 
