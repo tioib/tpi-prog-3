@@ -649,7 +649,7 @@ namespace Diagramador.NET
                     break;
 
                 case MouseButtons.Middle:
-                    Change(sender, e);
+                    ChangeColor(sender, e);
                     break;
             }
             accionMouse = -1;
