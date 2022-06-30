@@ -86,3 +86,34 @@ C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramado
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.Principal.resources
 C:\Users\Luciano\Desktop\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Principal.resources
 C:\Users\lucia\source\repos\Diagramador.NET\Diagramador.NET\obj\Debug\Diagramador.NET.Ayuda.resources
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Diagramador.NET.exe.config
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Diagramador.NET.exe
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Diagramador.NET.pdb
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Buffers.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Memory.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Text.Encodings.Web.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Text.Json.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.ValueTuple.dll
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Buffers.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Memory.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Text.Encodings.Web.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Text.Json.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\bin\Debug\System.ValueTuple.xml
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.AssemblyReference.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.SuggestedBindingRedirects.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Ayuda.resources
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Principal.resources
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.Properties.Resources.resources
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.GenerateResource.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.CoreCompileInputs.cache
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.csproj.CopyComplete
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.exe
+C:\Users\emanu\Desktop\TPI_ GRUPO 3\tpi-prog-3\Diagramador.NET\obj\Debug\Diagramador.NET.pdb

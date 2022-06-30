@@ -139,7 +139,7 @@ namespace Diagramador.NET
 
         private void DontEditText(object sender, KeyEventArgs e)
         {
-            if(e.KeyValue == (int)Keys.ControlKey) editText = false;
+            if(e.KeyValue == (int)Keys.ControlKey) editText = false;// cuando se suelta el control se vuelve falso
         }
 
         private void R_KeyPress(object sender, KeyEventArgs e)
@@ -237,10 +237,10 @@ namespace Diagramador.NET
                     return;
                 }
 
-                if (accionMouse > 1)
+                if (accionMouse > 1)// para la redimension 
                 {
                     primerPunto = new Point(figura[0], figura[1]);
-                    if(accionMouse > 9)
+                    if(accionMouse > 9) // redimension de flecha 10 - 11
                     {
                         actualPunto = new Point(figura[2], figura[3]);
                         pictureBox1.Cursor = Cursors.Cross;
@@ -250,9 +250,9 @@ namespace Diagramador.NET
                     return;
                 }
 
-                foreach (var r in save.figuras)
+                foreach (var r in save.figuras) 
                 {
-                    if (InsideFigura(r, e.Location))
+                    if (InsideFigura(r, e.Location)) // para mover la figura
                     {
                         if(r[5]<4)
                         {
@@ -277,7 +277,7 @@ namespace Diagramador.NET
                 {
                     if (InsideFigura(r, e.Location)) return;
                 }
-                accionMouse = 0;
+                accionMouse = 0;// hiciste clic en un espacio vacio no hay ninguna figura 
                 primerPunto = e.Location;
             }
         }
@@ -372,7 +372,7 @@ namespace Diagramador.NET
                     DrawPreview(opcion, colorDialog1.Color, (int)numericUpDown1.Value);
                     return;
 
-                case 1:
+                case 1:// se movia la figura 
                     if(figura[5] < 4)
                     {
                         primerPunto.X = e.X < previous.X ? figura[0] - Math.Abs(e.X - previous.X) : figura[0] + Math.Abs(e.X - previous.X);
@@ -390,66 +390,66 @@ namespace Diagramador.NET
                     }
                     return;
 
-                default:
+                default:// para redimensionar figuras
                     primerPunto.X = primerPunto.X != this.primerPunto.X ? this.primerPunto.X : primerPunto.X;
                     primerPunto.Y = primerPunto.Y != this.primerPunto.Y ? this.primerPunto.Y : primerPunto.Y;
                     actualPunto.X = actualPunto.X != this.actualPunto.X ? this.actualPunto.X : actualPunto.X;
                     actualPunto.Y = actualPunto.Y != this.actualPunto.Y ? this.actualPunto.Y : actualPunto.Y;
-                    switch (accionMouse)
+                    switch (accionMouse) // depende de donde se agarro la figura ,
                     {
-                        case 12:
+                        case 12: // cuando actionMouse es 2 y 12 es porq se redimensiona desde la izquierda un rectangulo o elipse
                             if (e.X >= actualPunto.X) return;
-                            primerPunto.X = e.X;
+                            primerPunto.X = e.X; 
                             break;
 
-                        case 13:
+                        case 13: // cuando actionMouse es 3 y 13 es porq se redimensiona desde la derecha un rectangulo o elipse
                             if (e.X <= primerPunto.X) return;
                             actualPunto.X = e.X;
                             break;
 
-                        case 14:
+                        case 14:// cuando actionMouse es 4 y 14 es porq se redimensiona desde arriba de un rectangulo o elipse
                             if (e.Y >= actualPunto.Y) return;
                             primerPunto.Y = e.Y;
                             break;
 
-                        case 15:
+                        case 15:// cuando actionMouse es 5 y 15 es porq se redimensiona desde abajo de un rectangulo o elipse
                             if (e.Y <= primerPunto.Y) return;
                             actualPunto.Y = e.Y;
                             break;
 
-                        case 16: 
+                        case 16: // redimensiona desde arriba a la izquierda
                             if (e.X >= actualPunto.X) return;
                             if (e.Y >= actualPunto.Y) return;
                             primerPunto.X = e.X;
                             primerPunto.Y = e.Y;
                             break;
 
-                        case 17:
+                        case 17:// redimensiona desde arriba a la derecha
                             if (e.X <= primerPunto.X) return;
                             if (e.Y >= actualPunto.Y) return;
                             actualPunto.X = e.X;
                             primerPunto.Y = e.Y;
                             break;
 
-                        case 18:
+                        case 18:// redimensiona desde abajo a la izquierda
                             if (e.X >= actualPunto.X) return;
                             if (e.Y <= primerPunto.Y) return;
                             primerPunto.X = e.X;
                             actualPunto.Y = e.Y;
                             break;
 
-                        case 19:
+                        case 19:// redimensiona desde abajo a la derecha
                             if (e.X <= primerPunto.X) return;
                             if (e.Y <= primerPunto.Y) return;
                             actualPunto.X = e.X;
                             actualPunto.Y = e.Y;
                             break;
 
-                        case 20:
+                        case 20:// redimesiona la flecha , si agarras el primer punto
                             primerPunto.X = e.X;
                             primerPunto.Y = e.Y;
                             break;
-                        case 21:
+                        case 21:// redimesiona la flecha , si agarras el segundo punto
                             actualPunto.X = e.X;
                             actualPunto.Y = e.Y;
                             break;
@@ -461,7 +461,7 @@ namespace Diagramador.NET
                     return;
             }
 
-            foreach (var r in save.figuras)
+            foreach (var r in save.figuras)// es para ver si apoyas en el borde
             {
                 figura = new int[] {
                             r[0],
@@ -479,14 +479,14 @@ namespace Diagramador.NET
                         if (e.X >= r[0] - r[4] && e.X < r[0])
                         {
                             pictureBox1.Cursor = Cursors.SizeWE;
-                            accionMouse = 2;
+                            accionMouse = 2;// si apoyas a la figura a la izquierda
                             return;
                         }
 
                         if (e.X <= r[0] + r[2] + r[4] && e.X > r[0] + r[2])
                         {
                             pictureBox1.Cursor = Cursors.SizeWE;
-                            accionMouse = 3;
+                            accionMouse = 3;// si apoyas a la figura a la derecha
                             return;
                         }
                     }
@@ -496,21 +496,21 @@ namespace Diagramador.NET
                         if(e.Y >= r[1] - r[4] && e.Y < r[1])
                         {
                             pictureBox1.Cursor = Cursors.SizeNS;
-                            accionMouse = 4;
+                            accionMouse = 4;// si apoyas a la figura arriba
                             return;
                         }
 
                         if (e.Y <= r[1] + r[3] + r[4] && e.Y > r[1] + r[3])
                         {
                             pictureBox1.Cursor = Cursors.SizeNS;
-                            accionMouse = 5;
+                            accionMouse = 5;// si apoyas a la figura abajo
                             return;
                         }
                     }
 
                     if(e.X >= r[0] - r[4] && e.X <= r[0] && e.Y >= r[1] - r[4] && e.Y <= r[1])
                     {
-                        pictureBox1.Cursor = Cursors.SizeNWSE;
+                        pictureBox1.Cursor = Cursors.SizeNWSE;// si apoyas a la figura en diagonal arriba a la izquierda
                         accionMouse = 6;
                         return;
                     }
@@ -535,7 +535,7 @@ namespace Diagramador.NET
                         accionMouse = 9;
                         return;
                     }
-                }
+                }//tipo de figura mayor a 4
                 else if(e.X >= r[0] - r[4] && e.X <= r[0] + r[4] && e.Y >= r[1] - r[4] && e.Y <= r[1] + r[4]) 
                 {
                     pictureBox1.Cursor = Cursors.Hand;
@@ -660,88 +660,13 @@ namespace Diagramador.NET
 
         private void BorrarFigura()
         {
-            Pen pen = new Pen(pictureBox1.BackColor);
-            SolidBrush brush = new SolidBrush(pictureBox1.BackColor);
-
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                switch (figura[5])
-                {
-                    case 0:
-                        pen.Width = figura[4];
-                        g.DrawRectangle(
-                            pen,
-                            figura[0],
-                            figura[1],
-                            figura[2],
-                            figura[3]
-                        );
-                        break;
-
-                    case 1:
-                        g.FillRectangle(
-                            brush,
-                            figura[0],
-                            figura[1],
-                            figura[2],
-                            figura[3]
-                        );
-                        break;
-
-                    case 2:
-                        pen.Width = figura[4];
-                        g.DrawEllipse(
-                            pen,
-                            figura[0],
-                            figura[1],
-                            figura[2],
-                            figura[3]
-                        );
-                        break;
-
-                    case 3:
-                        g.FillEllipse(
-                            brush,
-                            figura[0],
-                            figura[1],
-                            figura[2],
-                            figura[3]
-                        );
-                        break;
-
-                    default:
-                        pen.Width = figura[4];
-                        switch (figura[5])
-                        {
-                            //case 4:
-                            //    pen.StartCap = LineCap.ArrowAnchor;
-                            //    break;
-                            case 5:
-                                pen.EndCap = LineCap.ArrowAnchor;
-                                break;
-                            case 6:
-                                pen.StartCap = pen.EndCap = LineCap.ArrowAnchor;
-                                break;
-                        }
-                        g.DrawLine(
-                            pen,
-                            new Point(figura[0], figura[1]),
-                            new Point(figura[2], figura[3])
-                        );
-                        break;
-                }
-                g.Dispose();
-
-            }
-
-            pen.Dispose();
-            brush.Dispose();
-
             save.figuras.RemoveAt(figura[6]);
             save.colores.RemoveAt(figura[6]);
-
+            bmp = new Bitmap(splitContainer.Panel2.ClientSize.Width, splitContainer.Panel2.ClientSize.Height);
+            pictureBox1.Image = bmp;
             RedrawFiguras();
             pictureBox1.Refresh();
+
         }
 
         private void DibujarFigura(int opcion, Color color)
@@ -833,7 +758,7 @@ namespace Diagramador.NET
 
         private bool InsideFigura(int[] r, Point e)
         {
-            if (r[5] < 4) return r[0] < e.X && r[1] < e.Y && (r[0] + r[2]) > e.X && (r[1] + r[3]) > e.Y;
+            if (r[5] < 4) return r[0] < e.X && r[1] < e.Y && (r[0] + r[2]) > e.X && (r[1] + r[3]) > e.Y; 
 
             using(var path = new GraphicsPath())
             {
@@ -1049,8 +974,6 @@ namespace Diagramador.NET
                 changed = false;
             }
         }
-
-
 
         protected override void OnClosing(CancelEventArgs e) =>
             CheckChange(this, e);
